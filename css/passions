@@ -1,0 +1,61 @@
+/* ============================================
+   SECTION PASSIONS
+   ============================================ */
+
+.section-passions {
+    background: var(--couleur-fond);
+    padding: var(--espacement-lg) 0;
+}
+
+.passions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--espacement-md);
+}
+
+.passion-card {
+    background: rgba(249, 115, 22, 0.05);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: var(--border-radius);
+    padding: var(--espacement-lg);
+    transition: all var(--transition-rapide);
+}
+
+.passion-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--couleur-primaire);
+    box-shadow: 0 20px 40px rgba(249, 115, 22, 0.3);
+}
+
+.passion-icon {
+    font-size: 3rem;
+    margin-bottom: var(--espacement-sm);
+}
+
+.passion-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--couleur-primaire);
+    margin-bottom: var(--espacement-sm);
+}
+
+.passion-description {
+    color: var(--couleur-texte-dim);
+    margin-bottom: var(--espacement-md);
+    line-height: 1.6;
+}
+
+.passion-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.passion-tag {
+    background: rgba(249, 115, 22, 0.2);
+    color: var(--couleur-primaire);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid rgba(249, 115, 22, 0.3);
+}

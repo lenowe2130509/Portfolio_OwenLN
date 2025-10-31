@@ -1,0 +1,33 @@
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    padding: var(--espacement-lg) 0;
+    text-align: center;
+    border-top: 1px solid var(--couleur-texte-dim);
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--espacement-md);
+    margin-bottom: var(--espacement-md);
+}
+
+.footer-links a {
+    color: var(--couleur-texte);
+    text-decoration: none;
+    transition: color var(--transition-rapide);
+}
+
+.footer-links a:hover {
+    color: var(--couleur-primaire);
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    color: var(--couleur-texte-dim);
+}

@@ -1,0 +1,41 @@
+/* ============================================
+   VARIABLES CSS - THÈME MODERNE
+   ============================================ */
+:root {
+    /* Palette de couleurs principale */
+    --couleur-primaire: #F97316;      /* Orange vif */
+    --couleur-secondaire: #EF4444;    /* Rouge énergique */
+    --couleur-accent: #FBBF24;        /* Jaune soleil */
+    --couleur-fond: #1E293B;          /* Gris-bleu foncé */
+    
+    /* Couleurs dérivées */
+    --couleur-fond-clair: #334155;    /* Slate 700 */
+    --couleur-texte: #F8FAFC;         /* Slate 50 */
+    --couleur-texte-dim: #CBD5E1;     /* Slate 300 */
+    --couleur-blanc: #FFFFFF;
+    
+    /* Gradients modernes */
+    --gradient-primaire: linear-gradient(135deg, #F97316, #EF4444);
+    --gradient-secondaire: linear-gradient(135deg, #EF4444, #FBBF24);
+    
+    /* Ombres avec la nouvelle palette */
+    --shadow-sm: 0 2px 8px rgba(249, 115, 22, 0.1);
+    --shadow-md: 0 4px 16px rgba(249, 115, 22, 0.15);
+    --shadow-lg: 0 8px 32px rgba(249, 115, 22, 0.2);
+    --shadow-glow: 0 0 20px rgba(249, 115, 22, 0.5);
+    
+    /* Espacements */
+    --espacement-xs: 0.5rem;
+    --espacement-sm: 1rem;
+    --espacement-md: 1.5rem;
+    --espacement-lg: 3rem;
+    --espacement-xl: 5rem;
+    
+    /* Bordures et transitions */
+    --border-radius-sm: 0.5rem;
+    --border-radius-md: 1rem;
+    --border-radius-lg: 2rem;
+    --border-width: 2px;
+    --transition-rapide: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-lente: 0.6s cubic-bezier(0.77, 0, 0.18, 1);
+}

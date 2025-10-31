@@ -1,0 +1,55 @@
+/* ============================================
+   SECTION CONTACT
+   ============================================ */
+
+.section-contact {
+    background: var(--couleur-fond);
+    padding: var(--espacement-lg) 0;
+    text-align: center;
+}
+
+.contact-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--couleur-primaire);
+    margin-bottom: var(--espacement-md);
+}
+
+.contact-description {
+    color: var(--couleur-texte-dim);
+    margin-bottom: var(--espacement-lg);
+    line-height: 1.6;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(249, 115, 22, 0.05);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: var(--border-radius);
+    padding: var(--espacement-lg);
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: var(--espacement-sm);
+    margin-bottom: var(--espacement-md);
+    border: 1px solid var(--couleur-texte-dim);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+}
+
+.contact-form button {
+    background: var(--couleur-primaire);
+    color: var(--couleur-texte);
+    border: none;
+    padding: var(--espacement-sm) var(--espacement-lg);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background var(--transition-rapide);
+}
+
+.contact-form button:hover {
+    background: var(--couleur-secondaire);
+}

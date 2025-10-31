@@ -1,0 +1,40 @@
+/* ============================================
+   SECTION EXPÉRIENCES
+   ============================================ */
+
+.section-experiences {
+    background: var(--couleur-fond-clair);
+    padding: var(--espacement-lg) 0;
+}
+
+.experience-card {
+    background: rgba(249, 115, 22, 0.05);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: var(--border-radius);
+    padding: var(--espacement-lg);
+    transition: all var(--transition-rapide);
+}
+
+.experience-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--couleur-primaire);
+    box-shadow: 0 20px 40px rgba(249, 115, 22, 0.3);
+}
+
+.experience-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--couleur-primaire);
+    margin-bottom: var(--espacement-sm);
+}
+
+.experience-description {
+    color: var(--couleur-texte-dim);
+    margin-bottom: var(--espacement-md);
+    line-height: 1.6;
+}
+
+.experience-date {
+    font-size: 0.9rem;
+    color: var(--couleur-texte-dim);
+}
