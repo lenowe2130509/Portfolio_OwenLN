@@ -6,24 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Owen Le Nadant</title>
 
-    <!-- Styles -->
+    <!-- Styles dans le bon ordre -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/hero.css">
-    <link rel="stylesheet" href="css/skills.css">
-    <link rel="stylesheet" href="css/experiences.css">
-    <link rel="stylesheet" href="css/passions.css">
-    <link rel="stylesheet" href="css/contact.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/carousel.css">
     <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/team.css">
     
-    <!-- Polices -->
+    <!-- Police Google (optionnel mais recommandé) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Effet de rideau initial -->
@@ -37,27 +32,31 @@
         <div class="transition-panel left"></div>
         <div class="transition-panel right"></div>
     </div>
+
+    <!-- Navigation -->
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">Owen.LN</div>
-            <ul class="nav-menu">
-                <li><a href="#accueil" data-section="hero">Accueil</a></li>
-                <li><a href="#apropos" data-section="apropos">À propos</a></li>
-                <li><a href="#competences" data-section="competences">Compétences</a></li>
-                <li><a href="#experiences" data-section="experiences">Expériences</a></li>
-                <li><a href="#passions" data-section="passions">Passions</a></li>
-                <li><a href="#team" data-section="team">Team</a></li>
-                <li><a href="#contact" data-section="contact">Contact</a></li>
-            </ul>
+        <div class="logo">Owen.LN</div>
+        <ul class="nav-menu">
+            <li><a href="#accueil" data-section="hero">Accueil</a></li>
+            <li><a href="#apropos" data-section="apropos">À propos</a></li>
+            <li><a href="#competences" data-section="competences">Compétences</a></li>
+            <li><a href="#experiences" data-section="experiences">Expériences</a></li>
+            <li><a href="#contact" data-section="contact">Contact</a></li>
+        </ul>
+        <!-- Hamburger pour mobile -->
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </nav>
 
     <main id="content" class="container" style="padding-top:96px;">
-        <!-- Sections injected here -->
+        <!-- Sections injected here by loader.js -->
     </main>
 
     <footer id="site-footer" class="footer">
-        <!-- Le contenu sera injecté ici -->
+        <!-- Footer will be injected here -->
     </footer>
 
     <!-- Scripts -->
@@ -65,7 +64,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="js/loader.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/team.js"></script>
-
 </body>
 </html>
