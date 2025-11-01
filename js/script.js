@@ -1,22 +1,245 @@
 // ============================================
-// CLASSE CAROUSEL MODERNE
+// CAROUSEL 3D SEKAI STYLE - VERSION AMÉLIORÉE
 // ============================================
-class Carousel {
-    constructor(carouselId, options = {}) {
-        this.carousel = document.getElementById(carouselId);
-        if (!this.carousel) return;
+
+class SekaiCarousel3D {
+    constructor() {
+        this.carousel = document.querySelector('.carousel-3d');
+        this.rotation = document.querySelector('.carousel-rotation');
+        this.items = document.querySelectorAll('.carousel-item');
+        this.leftControl = document.querySelector('.carousel-control.left');
+        this.rightControl = document.querySelector('.carousel-control.right');
         
-        this.track = this.carousel.querySelector('.carousel-track');
-        this.items = this.carousel.querySelectorAll('.carousel-item');
-        this.prevBtn = document.getElementById(options.prevBtnId);
-        this.nextBtn = document.getElementById(options.nextBtnId);
-        this.pageInfo = document.getElementById(options.pageInfoId);
-        this.dotsContainer = document.getElementById(options.dotsId);
+        // État - Rotation horizontale et verticale
+        this.currentRotationY = 0;
+        this.targetRotationY = 0;
+        this.currentRotationX = 0;
+        this.targetRotationX = 0;
+        
+        this.isDragging = false;
+        this.startX = 0;
+        this.startY = 0;
+        this.startRotationY = 0;
+        this.startRotationX = 0;
+        
+        this.autoRotateSpeed = -0.08; // Sens anti-horaire (négatif)
+        this.isAutoRotating = true;
+        this.animationFrame = null;
+        
+        if (this.carousel && this.rotation && this.items.length > 0) {
+            this.init();
+        }
+    }
+    
+    init() {
+        console.log('🎪 Carousel Sekai initialisé avec', this.items.length, 'items');
+        this.setupControls();
+        this.setupDragInteraction();
+        this.addDragIndicator();
+        this.animate();
+    }
+    
+    addDragIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'rotation-indicator';
+        indicator.textContent = 'Maintenez et glissez pour tourner (horizontal et vertical)';
+        this.carousel.appendChild(indicator);
+    }
+    
+    setupControls() {
+        // Flèche gauche
+        if (this.rightControl) {
+            this.rightControl.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.stopAutoRotation();
+                this.rotateBy(-45, 0);
+                setTimeout(() => this.startAutoRotation(), 3000);
+                console.log('← Rotation gauche');
+            });
+        }
+        
+        // Flèche droite
+        if (this.leftControl) {
+            this.leftControl.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.stopAutoRotation();
+                this.rotateBy(45, 0);
+                setTimeout(() => this.startAutoRotation(), 3000);
+                console.log('→ Rotation droite');
+            });
+        }
+    }
+    
+    setupDragInteraction() {
+        // Souris
+        this.carousel.addEventListener('mousedown', (e) => {
+            this.onDragStart(e);
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            this.onDragMove(e);
+        });
+        
+        document.addEventListener('mouseup', () => {
+            this.onDragEnd();
+        });
+        
+        // Touch
+        this.carousel.addEventListener('touchstart', (e) => {
+            this.onDragStart(e.touches[0]);
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (this.isDragging) {
+                e.preventDefault();
+                this.onDragMove(e.touches[0]);
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchend', () => {
+            this.onDragEnd();
+        });
+        
+        // Empêcher la sélection
+        this.carousel.addEventListener('selectstart', (e) => e.preventDefault());
+    }
+    
+    onDragStart(e) {
+        this.isDragging = true;
+        this.startX = e.clientX;
+        this.startY = e.clientY;
+        this.startRotationY = this.currentRotationY;
+        this.startRotationX = this.currentRotationX;
+        this.stopAutoRotation();
+        this.carousel.classList.add('dragging');
+        console.log('🖱️ Drag démarré');
+    }
+    
+    onDragMove(e) {
+        if (!this.isDragging) return;
+        
+        // Rotation horizontale (gauche/droite)
+        const deltaX = e.clientX - this.startX;
+        const rotationChangeY = deltaX * 0.2; // Sensibilité RÉDUITE (était 0.3)
+        this.targetRotationY = this.startRotationY + rotationChangeY;
+        
+        // Rotation verticale (haut/bas) - NOUVEAU
+        const deltaY = e.clientY - this.startY;
+        const rotationChangeX = deltaY * 0.15; // Sensibilité verticale
+        this.targetRotationX = this.startRotationX - rotationChangeX;
+        
+        // Limiter la rotation verticale entre -30° et +30°
+        this.targetRotationX = Math.max(-30, Math.min(30, this.targetRotationX));
+    }
+    
+    onDragEnd() {
+        if (!this.isDragging) return;
+        
+        this.isDragging = false;
+        this.carousel.classList.remove('dragging');
+        console.log('🖱️ Drag terminé');
+        
+        // Retour progressif à l'horizontale
+        this.targetRotationX = 0;
+        
+        // Redémarrer l'auto-rotation après 2 secondes
+        setTimeout(() => {
+            this.startAutoRotation();
+        }, 2000);
+    }
+    
+    rotateBy(degreesY, degreesX) {
+        this.targetRotationY += degreesY;
+        this.targetRotationX += degreesX;
+    }
+    
+    startAutoRotation() {
+        this.isAutoRotating = true;
+        console.log('▶️ Auto-rotation activée');
+    }
+    
+    stopAutoRotation() {
+        this.isAutoRotating = false;
+        console.log('⏸️ Auto-rotation désactivée');
+    }
+    
+    animate() {
+        // Auto-rotation si activée
+        if (this.isAutoRotating && !this.isDragging) {
+            this.targetRotationY += this.autoRotateSpeed;
+        }
+        
+        // Interpolation smooth pour les deux axes
+        const diffY = this.targetRotationY - this.currentRotationY;
+        const diffX = this.targetRotationX - this.currentRotationX;
+        
+        this.currentRotationY += diffY * 0.08; // Vitesse smooth RÉDUITE (était 0.1)
+        this.currentRotationX += diffX * 0.08;
+        
+        // Appliquer les rotations sur les deux axes
+        if (this.rotation) {
+            this.rotation.style.transform = `rotateX(${this.currentRotationX}deg) rotateY(${this.currentRotationY}deg)`;
+        }
+        
+        // Mettre à jour les cartes en avant
+        this.updateFrontCards();
+        
+        // Continue l'animation
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+    }
+    
+    updateFrontCards() {
+        // Calculer quelle carte devrait être devant en fonction de la rotation
+        // Normaliser la rotation entre 0 et 360
+        const normalizedRotation = ((this.currentRotationY % 360) + 360) % 360;
+        
+        // Chaque carte occupe 45° (360° / 8 cartes)
+        const totalCards = this.items.length;
+        const degreesPerCard = 360 / totalCards;
+        
+        // INVERSER le calcul pour que la luminescence suive l'ordre HTML (0→1→2→3...)
+        // même si la rotation est anti-horaire
+        let frontCardIndex = Math.round((360 - normalizedRotation) / degreesPerCard) % totalCards;
+        
+        // Appliquer la classe is-front uniquement à la carte calculée
+        this.items.forEach((item, index) => {
+            if (index === frontCardIndex) {
+                item.classList.add('is-front');
+                // Debug occasionnel
+                if (Math.random() < 0.01) {
+                    console.log(`✨ Carte ${index} lumineuse: ${item.querySelector('.skill-title')?.textContent}`);
+                }
+            } else {
+                item.classList.remove('is-front');
+            }
+        });
+    }
+    
+    destroy() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+    }
+}
+
+// ============================================
+// CAROUSEL EXPÉRIENCES (Simple)
+// ============================================
+class SimpleCarousel {
+    constructor() {
+        this.track = document.querySelector('.carousel-track');
+        this.items = document.querySelectorAll('.carousel-item-exp');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.pageInfo = document.getElementById('pageInfo');
+        this.dotsContainer = document.getElementById('carouselDots');
         
         this.currentIndex = 0;
         this.totalPages = this.items.length;
         
-        this.init();
+        if (this.track && this.items.length > 0) {
+            this.init();
+        }
     }
     
     init() {
@@ -38,20 +261,16 @@ class Carousel {
     }
     
     updateCarousel() {
-        // Déplacer le track
         const offset = -this.currentIndex * 100;
         this.track.style.transform = `translateX(${offset}%)`;
         
-        // Mettre à jour les boutons
         if (this.prevBtn) this.prevBtn.disabled = this.currentIndex === 0;
         if (this.nextBtn) this.nextBtn.disabled = this.currentIndex === this.totalPages - 1;
         
-        // Mettre à jour l'info de page
         if (this.pageInfo) {
             this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
         }
         
-        // Mettre à jour les dots
         if (this.dotsContainer) {
             const dots = this.dotsContainer.querySelectorAll('.dot');
             dots.forEach((dot, index) => {
@@ -84,414 +303,262 @@ class Carousel {
 // ============================================
 // INITIALISATION PRINCIPALE
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize GSAP
-    if (typeof gsap !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
-    }
+let sekaiCarousel = null;
 
-    // Animation initiale du rideau
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM chargé');
+    
+    // ============================================
+    // ANIMATION DU RIDEAU
+    // ============================================
     const transitionInitial = document.querySelector('.page-transition-initial');
     const curtainLeft = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
 
-    // Fonction pour l'animation initiale du rideau
     window.addEventListener('load', () => {
         setTimeout(() => {
             if (curtainLeft && curtainRight) {
                 curtainLeft.style.transform = 'translateX(-100%)';
                 curtainRight.style.transform = 'translateX(100%)';
-
-                // Ajout de l'effet de brillance
-                const shine = document.createElement('div');
-                shine.classList.add('shine-effect');
-                if (transitionInitial) {
-                    transitionInitial.appendChild(shine);
-                }
             }
             
-            // Supprime l'élément après l'animation
             setTimeout(() => {
                 if (transitionInitial) {
                     transitionInitial.remove();
                 }
-            }, 1500);
+            }, 1200);
         }, 300);
     });
 
-    // Fonction pour les transitions entre sections
-    function initPageTransitions() {
-        const transition = document.querySelector('.page-transition');
-        if (!transition) return { startTransition: () => {}, endTransition: () => {} };
+    // ============================================
+    // GSAP ANIMATIONS
+    // ============================================
+    if (typeof gsap !== 'undefined') {
+        console.log('✅ GSAP chargé');
+        gsap.registerPlugin(ScrollTrigger);
         
-        const panels = {
-            left: transition.querySelector('.transition-panel.left'),
-            right: transition.querySelector('.transition-panel.right')
-        };
-
-        function startTransition() {
-            transition.style.visibility = 'visible';
-            if (panels.left) panels.left.style.transform = 'translateX(0)';
-            if (panels.right) panels.right.style.transform = 'translateX(0)';
-        }
-
-        function endTransition() {
-            if (panels.left) panels.left.style.transform = 'translateX(-100%)';
-            if (panels.right) panels.right.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                transition.style.visibility = 'hidden';
-            }, 600);
-        }
-
-        return { startTransition, endTransition };
+        // Hero
+        gsap.from('.hero-title', {
+            duration: 1.2,
+            y: 100,
+            opacity: 0,
+            ease: 'power4.out',
+            delay: 1.5
+        });
+        
+        gsap.from('.hero-subtitle', {
+            duration: 0.8,
+            y: 30,
+            opacity: 0,
+            ease: 'power3.out',
+            delay: 1.8
+        });
+        
+        gsap.from('.cta-button', {
+            duration: 0.8,
+            y: 20,
+            opacity: 0,
+            ease: 'back.out(1.7)',
+            delay: 2
+        });
+        
+        // À propos
+        gsap.from('.apropos-text', {
+            scrollTrigger: {
+                trigger: '.section-apropos',
+                start: 'top 70%',
+            },
+            duration: 1,
+            y: 60,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+        
+        gsap.from('.stat-card', {
+            scrollTrigger: {
+                trigger: '.stats-grid',
+                start: 'top 80%',
+            },
+            duration: 0.8,
+            y: 40,
+            opacity: 0,
+            stagger: 0.1,
+            ease: 'power3.out'
+        });
+        
+        // Compétences 3D
+        gsap.from('.carousel-3d', {
+            scrollTrigger: {
+                trigger: '.section-competences',
+                start: 'top 70%',
+            },
+            duration: 1.2,
+            scale: 0.8,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+        
+        // Expériences
+        gsap.from('.experience-card', {
+            scrollTrigger: {
+                trigger: '.section-experiences',
+                start: 'top 70%',
+            },
+            duration: 0.8,
+            x: -50,
+            opacity: 0,
+            stagger: 0.15,
+            ease: 'power3.out'
+        });
+        
+        // Passions
+        gsap.from('.passion-card', {
+            scrollTrigger: {
+                trigger: '.section-passions',
+                start: 'top 70%',
+            },
+            duration: 0.8,
+            scale: 0.8,
+            opacity: 0,
+            stagger: 0.1,
+            ease: 'back.out(1.7)'
+        });
+        
+        // Contact
+        gsap.from('.contact-text', {
+            scrollTrigger: {
+                trigger: '.section-contact',
+                start: 'top 70%',
+            },
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: 'power3.out'
+        });
+        
+        gsap.from('.contact-btn', {
+            scrollTrigger: {
+                trigger: '.contact-links',
+                start: 'top 80%',
+            },
+            duration: 0.6,
+            y: 30,
+            opacity: 0,
+            stagger: 0.1,
+            ease: 'back.out(1.7)'
+        });
+    } else {
+        console.warn('⚠️ GSAP non chargé');
     }
 
     // ============================================
-    // ANIMATIONS PAR SECTION
+    // NAVIGATION SCROLL
     // ============================================
-    function initSectionAnimations(sectionName) {
-        if (typeof gsap === 'undefined') return;
-
-        switch(sectionName) {
-            case 'hero':
-                const heroTl = gsap.timeline({ delay: 0.2 });
-                
-                // Animation du hero moderne
-                if (document.querySelector('.hero-eyebrow')) {
-                    heroTl.from('.hero-eyebrow', {
-                        duration: 0.8,
-                        y: 30,
-                        opacity: 0,
-                        ease: 'power3.out'
-                    });
-                }
-                
-                if (document.querySelector('.hero-title')) {
-                    heroTl.from('.hero-title', {
-                        duration: 1,
-                        y: 50,
-                        opacity: 0,
-                        ease: 'power3.out'
-                    }, '-=0.4');
-                }
-                
-                if (document.querySelector('.hero-description')) {
-                    heroTl.from('.hero-description', {
-                        duration: 0.8,
-                        y: 30,
-                        opacity: 0,
-                        ease: 'power3.out'
-                    }, '-=0.6');
-                }
-                
-                if (document.querySelector('.cta-group')) {
-                    heroTl.from('.cta-group .btn', {
-                        duration: 0.8,
-                        y: 20,
-                        opacity: 0,
-                        stagger: 0.2,
-                        ease: 'back.out(1.7)'
-                    }, '-=0.4');
-                }
-                
-                // Mouse follow effect
-                const cursor = document.querySelector('.mouse-follow-overlay');
-                if (cursor) {
-                    window.addEventListener('mousemove', (e) => {
-                        const x = e.clientX;
-                        const y = e.clientY;
-                        cursor.style.background = `radial-gradient(600px at ${x}px ${y}px, rgba(59, 130, 246, 0.15), transparent 80%)`;
-                    });
-                }
-                break;
-
-            case 'apropos':
-                gsap.from('.about-text', {
-                    scrollTrigger: {
-                        trigger: '.about-text',
-                        start: 'top 80%',
-                        toggleActions: 'play none none reverse'
-                    },
-                    duration: 1,
-                    y: 50,
-                    opacity: 0,
-                    ease: 'power3.out'
-                });
-
-                gsap.from('.about-details', {
-                    scrollTrigger: {
-                        trigger: '.about-details',
-                        start: 'top 80%'
-                    },
-                    duration: 0.8,
-                    y: 30,
-                    opacity: 0,
-                    ease: 'power3.out'
-                });
-                break;
-
-            case 'competences':
-                gsap.from('.skills-grid .skill-card', {
-                    scrollTrigger: {
-                        trigger: '.skills-grid',
-                        start: 'top 80%'
-                    },
-                    duration: 0.8,
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.15,
-                    ease: 'power3.out'
-                });
-                break;
-
-            case 'experiences':
-                // Initialiser le carousel expériences
-                setTimeout(() => {
-                    new Carousel('experiencesCarousel', {
-                        prevBtnId: 'experiencesPrev',
-                        nextBtnId: 'experiencesNext',
-                        pageInfoId: 'experiencesPageInfo',
-                        dotsId: 'experiencesDots'
-                    });
-                }, 100);
-
-                // Animation des cartes
-                gsap.from('.experience-card', {
-                    scrollTrigger: {
-                        trigger: '.carousel-container',
-                        start: 'top 80%'
-                    },
-                    duration: 0.8,
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.15,
-                    ease: 'power3.out'
-                });
-                break;
-
-            case 'projects':
-                // Initialiser le carousel projets
-                setTimeout(() => {
-                    new Carousel('projectsCarousel', {
-                        prevBtnId: 'projectsPrev',
-                        nextBtnId: 'projectsNext',
-                        pageInfoId: 'projectsPageInfo',
-                        dotsId: 'projectsDots'
-                    });
-                }, 100);
-
-                // Animation des cartes
-                gsap.from('.project-card', {
-                    scrollTrigger: {
-                        trigger: '.projects-grid',
-                        start: 'top 80%'
-                    },
-                    duration: 0.8,
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.1,
-                    ease: 'power3.out'
-                });
-                break;
-
-            case 'passions':
-                gsap.from('.passion-card', {
-                    scrollTrigger: {
-                        trigger: '.passions-grid',
-                        start: 'top 80%'
-                    },
-                    duration: 0.8,
-                    scale: 0.95,
-                    opacity: 0,
-                    stagger: 0.15,
-                    ease: 'power3.out'
-                });
-                break;
-
-            case 'contact':
-                gsap.from('.contact-text', {
-                    scrollTrigger: {
-                        trigger: '.section-contact',
-                        start: 'top 80%'
-                    },
-                    duration: 0.8,
-                    y: 30,
-                    opacity: 0,
-                    ease: 'power3.out'
-                });
-
-                gsap.from('.contact-email', {
-                    scrollTrigger: {
-                        trigger: '.contact-details',
-                        start: 'top 85%'
-                    },
-                    duration: 0.6,
-                    y: 20,
-                    opacity: 0,
-                    ease: 'back.out(1.7)'
-                });
-                break;
-
-            default:
-                // Animations par défaut pour toutes les sections
-                const sectionTitle = document.querySelector('.section-title');
-                if (sectionTitle) {
-                    gsap.from(sectionTitle, {
-                        scrollTrigger: {
-                            trigger: sectionTitle,
-                            start: 'top 80%',
-                            toggleActions: 'play none none reverse'
-                        },
-                        duration: 0.8,
-                        y: 30,
-                        opacity: 0,
-                        ease: 'power3.out'
-                    });
-                }
-                break;
+    const navbar = document.querySelector('.navbar');
+    
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
         }
-    }
-
-    // Écouter l'événement de chargement de section
-    document.addEventListener('section:loaded', (e) => {
-        const sectionName = e.detail.name;
-        console.log('🎯 Section chargée:', sectionName);
-        initSectionAnimations(sectionName);
     });
 
     // ============================================
-    // ANIMATION DE LA NAVIGATION
+    // SMOOTH SCROLL
     // ============================================
-    if (typeof gsap !== 'undefined') {
-        const navbar = document.querySelector('.navbar');
-        if (navbar) {
-            const navTl = gsap.timeline({ delay: 0.5 });
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
             
-            navTl
-                .from('.navbar', {
-                    duration: 0.8,
-                    y: -100,
-                    opacity: 0,
-                    ease: 'power4.out'
-                })
-                .from('.nav-menu li', {
-                    duration: 0.5,
-                    y: -20,
-                    opacity: 0,
-                    stagger: 0.1,
-                    ease: 'back.out(1.7)'
-                }, '-=0.3');
-        }
-
-        // Effet de scroll sur la navbar
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (!navbar) return;
-            
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+            if (target) {
+                const offsetTop = target.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
             }
-            
-            lastScroll = currentScroll;
+        });
+    });
+
+    // ============================================
+    // INITIALISATION CAROUSELS
+    // ============================================
+    setTimeout(() => {
+        // Carousel expériences
+        if (document.querySelector('.carousel-track')) {
+            new SimpleCarousel();
+            console.log('✅ Carousel expériences initialisé');
+        }
+        
+        // Carousel 3D Sekai - IMPORTANT
+        const carouselElement = document.querySelector('.carousel-3d');
+        if (carouselElement) {
+            sekaiCarousel = new SekaiCarousel3D();
+            console.log('✅ Carousel 3D Sekai initialisé');
+        } else {
+            console.error('❌ Element .carousel-3d non trouvé !');
+        }
+        
+    }, 100);
+
+    // ============================================
+    // PARALLAXE HERO
+    // ============================================
+    const heroContent = document.querySelector('.hero-content');
+    
+    if (heroContent) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.3;
+            heroContent.style.transform = `translateY(${parallax}px)`;
+            heroContent.style.opacity = 1 - (scrolled / 800);
         });
     }
 
     // ============================================
-    // NAVIGATION HAMBURGER (MOBILE)
+    // CURSEUR CUSTOM (Desktop only)
     // ============================================
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
+    if (window.innerWidth > 768) {
+        const cursor = document.createElement('div');
+        cursor.classList.add('custom-cursor');
+        cursor.style.cssText = `
+            width: 40px;
+            height: 40px;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.2s ease;
+            display: none;
+        `;
+        document.body.appendChild(cursor);
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.display = 'block';
+            cursor.style.left = e.clientX - 20 + 'px';
+            cursor.style.top = e.clientY - 20 + 'px';
         });
-
-        // Fermer le menu lors du clic sur un lien
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
+        
+        const clickables = document.querySelectorAll('a, button, .skill-card, .passion-card, .carousel-control');
+        clickables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
             });
         });
     }
 
     // ============================================
-    // TRANSITIONS DE PAGES
+    // DEBUG
     // ============================================
-    const pageTransitions = initPageTransitions();
-
-    // Listen for navigation events
-    document.querySelectorAll('.nav-menu a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            const target = link.getAttribute('data-section');
-            if (target) {
-                e.preventDefault();
-                pageTransitions.startTransition();
-                setTimeout(() => {
-                    window.location.hash = link.getAttribute('href');
-                    pageTransitions.endTransition();
-                }, 600);
-            }
-        });
-    });
-
-    // ============================================
-    // NAVIGATION CLAVIER GLOBALE
-    // ============================================
-    document.addEventListener('keydown', (e) => {
-        // Échap pour fermer le menu mobile
-        if (e.key === 'Escape' && navMenu && navMenu.classList.contains('active')) {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-        }
-    });
-
-    // ============================================
-    // SMOOTH SCROLL POUR LES ANCRES
-    // ============================================
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href !== '#' && !this.hasAttribute('data-section')) {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            }
-        });
-    });
-
-    // ============================================
-    // INTERSECTION OBSERVER POUR LES ANIMATIONS
-    // ============================================
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-            }
-        });
-    }, observerOptions);
-
-    // Observer tous les éléments avec la classe .scroll-reveal
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-        observer.observe(el);
-    });
-
-    console.log('✅ Script initialisé avec succès');
+    console.log('✨ Portfolio Owen Le Nadant - Style Sekai One');
+    console.log('🎪 Carousel 3D:', sekaiCarousel ? 'ACTIF ✅' : 'INACTIF ❌');
 });
