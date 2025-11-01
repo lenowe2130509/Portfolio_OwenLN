@@ -1,461 +1,497 @@
 // ============================================
-// ANIMATIONS GSAP AU SCROLL (VERSION FLUIDE)
+// CLASSE CAROUSEL MODERNE
 // ============================================
-
-// Attendre que tout soit chargé
-document.addEventListener('DOMContentLoaded', function() {
-
-// Attendre que GSAP soit chargé
-gsap.registerPlugin(ScrollTrigger);
-
-// Configuration globale pour des animations plus fluides
-gsap.defaults({
-    ease: 'power2.out',
-    duration: 0.6
-});
-
-// ===== ANIMATIONS AU CHARGEMENT DE LA PAGE =====
-
-// Animation du Hero au chargement (plus rapide)
-const heroTimeline = gsap.timeline({ delay: 0.1 });
-
-heroTimeline
-    .from('.hero-title', {
-        duration: 0.8,
-        y: -30,
-        opacity: 0,
-        scale: 0.9,
-        ease: 'back.out(1.5)'
-    })
-    .from('.hero-subtitle', {
-        duration: 0.6,
-        y: 20,
-        opacity: 0,
-        ease: 'power3.out'
-    }, '-=0.4')
-    .from('.cta-button', {
-        duration: 0.7,
-        y: 20,
-        opacity: 0,
-        scale: 0.9,
-        ease: 'back.out(1.5)'
-    }, '-=0.3');
-
-// Animation de la navbar (plus rapide)
-gsap.from('.navbar', {
-    duration: 0.6,
-    y: -80,
-    opacity: 0,
-    ease: 'power3.out'
-});
-
-// ===== ANIMATIONS AU SCROLL (DÉCLENCHEMENT PLUS TÔT) =====
-
-// Configuration par défaut pour ScrollTrigger
-ScrollTrigger.defaults({
-    start: 'top 75%',
-    toggleActions: 'play none none none',
-});
-
-// Animation des titres de section
-gsap.utils.toArray('.section-title').forEach(title => {
-    gsap.from(title, {
-        scrollTrigger: {
-            trigger: title,
-            start: 'top 70%'
-        },
-        duration: 0.6,
-        x: -60,
-        opacity: 0
-    });
-});
-
-// Animation des éléments avec classe hidden-fade
-gsap.utils.toArray('.hidden-fade').forEach(element => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.7,
-        opacity: 0
-    });
-});
-
-// Animation des éléments avec classe hidden-slide-up
-gsap.utils.toArray('.hidden-slide-up').forEach(element => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.6,
-        y: 40,
-        opacity: 0
-    });
-});
-
-// Animation des éléments avec classe hidden-slide-down
-gsap.utils.toArray('.hidden-slide-down').forEach(element => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.6,
-        y: -40,
-        opacity: 0
-    });
-});
-
-// Animation des éléments avec classe hidden-slide-left
-gsap.utils.toArray('.hidden-slide-left').forEach(element => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.6,
-        x: -60,
-        opacity: 0
-    });
-});
-
-// Animation des éléments avec classe hidden-slide-right
-gsap.utils.toArray('.hidden-slide-right').forEach(element => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.6,
-        x: 60,
-        opacity: 0
-    });
-});
-
-// Animation des éléments avec classe hidden-scale
-gsap.utils.toArray('.hidden-scale').forEach(element => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.7,
-        scale: 0.85,
-        opacity: 0,
-        ease: 'back.out(1.3)'
-    });
-});
-
-// Animation des éléments avec classe hidden-rotate (plus fluide)
-gsap.utils.toArray('.hidden-rotate').forEach((element, index) => {
-    gsap.from(element, {
-        scrollTrigger: {
-            trigger: element,
-            start: 'top 75%'
-        },
-        duration: 0.7,
-        rotation: -10,
-        scale: 0.9,
-        opacity: 0,
-        ease: 'back.out(1.3)',
-        delay: index * 0.1
-    });
-});
-
-// Animation des stat-cards avec effet stagger (plus rapide)
-const statCards = gsap.utils.toArray('.stat-card');
-if (statCards.length > 0) {
-    gsap.from(statCards, {
-        scrollTrigger: {
-            trigger: '.stats-grid',
-            start: 'top 75%'
-        },
-        duration: 0.5,
-        y: 30,
-        opacity: 0,
-        scale: 0.95,
-        stagger: 0.08,
-        ease: 'back.out(1.3)'
-    });
-}
-
-// Animation des skill-cards (groupées pour plus de fluidité)
-const skillCards = gsap.utils.toArray('.skill-card');
-if (skillCards.length > 0) {
-    gsap.from(skillCards, {
-        scrollTrigger: {
-            trigger: '.skills-grid',
-            start: 'top 75%'
-        },
-        duration: 0.6,
-        y: 40,
-        rotation: -5,
-        scale: 0.9,
-        opacity: 0,
-        stagger: 0.1,
-        ease: 'back.out(1.3)'
-    });
-}
-
-// Animation des passion-cards avec effet 3D (plus doux)
-const passionCards = gsap.utils.toArray('.passion-card');
-if (passionCards.length > 0) {
-    gsap.from(passionCards, {
-        scrollTrigger: {
-            trigger: '.passions-grid',
-            start: 'top 75%'
-        },
-        duration: 0.7,
-        rotationY: 45,
-        scale: 0.8,
-        opacity: 0,
-        stagger: 0.12,
-        ease: 'back.out(1.5)'
-    });
-}
-
-// Animation du carrousel d'expériences
-gsap.from('.carousel-container', {
-    scrollTrigger: {
-        trigger: '.carousel-container',
-        start: 'top 75%'
-    },
-    duration: 0.8,
-    y: 40,
-    opacity: 0
-});
-
-// Animation des boutons de contact
-const contactBtns = gsap.utils.toArray('.contact-btn');
-if (contactBtns.length > 0) {
-    gsap.from(contactBtns, {
-        scrollTrigger: {
-            trigger: '.contact-links',
-            start: 'top 75%'
-        },
-        duration: 0.5,
-        y: 25,
-        opacity: 0,
-        scale: 0.9,
-        stagger: 0.08,
-        ease: 'back.out(1.5)'
-    });
-}
-
-// Parallax subtil pour le hero-bg (plus doux)
-gsap.to('.hero-bg', {
-    scrollTrigger: {
-        trigger: '.hero',
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.5
-    },
-    y: 150,
-    opacity: 0.3
-});
-
-// Animation de compteur pour les stat-number (plus rapide)
-gsap.utils.toArray('.stat-number').forEach(stat => {
-    const target = stat.textContent.replace('+', '').replace('%', '');
-    const hasPlus = stat.textContent.includes('+');
-    const hasPercent = stat.textContent.includes('%');
-    
-    if (!isNaN(parseInt(target)) && target !== '∞') {
-        const finalValue = parseInt(target);
+class Carousel {
+    constructor(carouselId, options = {}) {
+        this.carousel = document.getElementById(carouselId);
+        if (!this.carousel) return;
         
-        gsap.from(stat, {
-            scrollTrigger: {
-                trigger: stat,
-                start: 'top 75%'
-            },
-            textContent: 0,
-            duration: 1.5,
-            ease: 'power2.out',
-            snap: { textContent: 1 },
-            onUpdate: function() {
-                const current = Math.ceil(this.targets()[0].textContent);
-                let displayText = current.toString();
-                if (hasPlus) displayText += '+';
-                if (hasPercent) displayText += '%';
-                stat.textContent = displayText;
-            }
-        });
-    }
-});
-
-// Animation du texte du contact
-gsap.from('.contact-text', {
-    scrollTrigger: {
-        trigger: '.contact-text',
-        start: 'top 75%'
-    },
-    duration: 0.6,
-    y: 20,
-    opacity: 0
-});
-
-// Amélioration de la fluidité du scroll
-ScrollTrigger.config({
-    autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load'
-});
-
-// ===== FIN DES ANIMATIONS GSAP =====
-
-
-// ============================================
-// CARROUSEL D'EXPÉRIENCES (VERSION CORRIGÉE)
-// ============================================
-
-    const track = document.querySelector('.carousel-track');
-    const cards = document.querySelectorAll('.experience-card');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const dotsContainer = document.getElementById('carouselDots');
-    
-    // Vérifier que les éléments existent
-    if (!track || !cards.length || !prevBtn || !nextBtn || !dotsContainer) {
-        console.error('❌ Erreur : Éléments du carrousel non trouvés');
-        console.log('Track:', track);
-        console.log('Cards:', cards.length);
-        console.log('PrevBtn:', prevBtn);
-        console.log('NextBtn:', nextBtn);
-        console.log('Dots:', dotsContainer);
-        return;
-    }
-    
-    console.log('✅ Carrousel initialisé avec', cards.length, 'expériences');
-    
-    let currentIndex = 0;
-    const totalCards = cards.length;
-    
-    // Fonction pour détecter combien de cartes sont visibles
-    function getVisibleCards() {
-        if (window.innerWidth <= 768) return 1;
-        if (window.innerWidth <= 1024) return 2;
-        return 3;
-    }
-    
-    // Créer les dots
-    function createDots() {
-        dotsContainer.innerHTML = '';
-        const visibleCards = getVisibleCards();
-        const maxIndex = totalCards - visibleCards;
+        this.track = this.carousel.querySelector('.carousel-track');
+        this.items = this.carousel.querySelectorAll('.carousel-item');
+        this.prevBtn = document.getElementById(options.prevBtnId);
+        this.nextBtn = document.getElementById(options.nextBtnId);
+        this.pageInfo = document.getElementById(options.pageInfoId);
+        this.dotsContainer = document.getElementById(options.dotsId);
         
-        for (let i = 0; i <= maxIndex; i++) {
+        this.currentIndex = 0;
+        this.totalPages = this.items.length;
+        
+        this.init();
+    }
+    
+    init() {
+        this.createDots();
+        this.updateCarousel();
+        this.attachEvents();
+    }
+    
+    createDots() {
+        if (!this.dotsContainer) return;
+        
+        for (let i = 0; i < this.totalPages; i++) {
             const dot = document.createElement('div');
             dot.classList.add('dot');
             if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToIndex(i));
-            dotsContainer.appendChild(dot);
+            dot.addEventListener('click', () => this.goToPage(i));
+            this.dotsContainer.appendChild(dot);
         }
     }
     
-    // Aller à un index spécifique
-    function goToIndex(index) {
-        const visibleCards = getVisibleCards();
-        const maxIndex = totalCards - visibleCards;
-        currentIndex = Math.max(0, Math.min(index, maxIndex));
-        updateCarousel();
-    }
-    
-    // Mettre à jour le carrousel
-    function updateCarousel() {
-        const visibleCards = getVisibleCards();
-        const maxIndex = totalCards - visibleCards;
-        currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+    updateCarousel() {
+        // Déplacer le track
+        const offset = -this.currentIndex * 100;
+        this.track.style.transform = `translateX(${offset}%)`;
         
-        // Calculer la largeur d'une carte + gap
-        const firstCard = cards[0];
-        const cardWidth = firstCard.offsetWidth;
-        const trackStyle = window.getComputedStyle(track);
-        const gap = parseFloat(trackStyle.gap);
+        // Mettre à jour les boutons
+        if (this.prevBtn) this.prevBtn.disabled = this.currentIndex === 0;
+        if (this.nextBtn) this.nextBtn.disabled = this.currentIndex === this.totalPages - 1;
         
-        // Déplacement total = (largeur carte + gap) * index
-        const translateX = -(currentIndex * (cardWidth + gap));
-        track.style.transform = `translateX(${translateX}px)`;
+        // Mettre à jour l'info de page
+        if (this.pageInfo) {
+            this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
+        }
         
         // Mettre à jour les dots
-        const dots = document.querySelectorAll('.dot');
-        dots.forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentIndex);
-        });
-        
-        // Désactiver les boutons si nécessaire
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex >= maxIndex;
-        
-        // Effet de focus sur les cartes visibles
-        cards.forEach((card, index) => {
-            card.style.transition = 'opacity 0.3s ease';
-            card.style.opacity = (index >= currentIndex && index < currentIndex + visibleCards) ? '1' : '0.5';
-        });
+        if (this.dotsContainer) {
+            const dots = this.dotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === this.currentIndex);
+            });
+        }
     }
     
-    // Bouton précédent
-    prevBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
+    goToPage(index) {
+        if (index >= 0 && index < this.totalPages) {
+            this.currentIndex = index;
+            this.updateCarousel();
         }
-    });
+    }
     
-    // Bouton suivant
-    nextBtn.addEventListener('click', () => {
-        const visibleCards = getVisibleCards();
-        const maxIndex = totalCards - visibleCards;
-        
-        if (currentIndex < maxIndex) {
-            currentIndex++;
-            updateCarousel();
-        }
-    });
+    prev() {
+        this.goToPage(this.currentIndex - 1);
+    }
     
-    // Navigation au clavier
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
-            prevBtn.click();
-        } else if (e.key === 'ArrowRight' && !nextBtn.disabled) {
-            nextBtn.click();
-        }
-    });
+    next() {
+        this.goToPage(this.currentIndex + 1);
+    }
     
-    // Support du swipe sur mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    track.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    track.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        const swipeThreshold = 50;
-        
-        if (touchStartX - touchEndX > swipeThreshold && !nextBtn.disabled) {
-            nextBtn.click();
-        } else if (touchEndX - touchStartX > swipeThreshold && !prevBtn.disabled) {
-            prevBtn.click();
-        }
-    });
-    
-    // Gestion du redimensionnement
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            currentIndex = 0;
-            createDots();
-            updateCarousel();
-        }, 250);
-    });
-    
-    // Initialisation du carrousel
-    setTimeout(() => {
-        createDots();
-        updateCarousel();
-        console.log('✅ Carrousel prêt !');
-    }, 100); // Petit délai pour laisser le CSS se charger
+    attachEvents() {
+        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prev());
+        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.next());
+    }
+}
 
-}); // Fin du DOMContentLoaded
+// ============================================
+// INITIALISATION PRINCIPALE
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize GSAP
+    if (typeof gsap !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+    }
+
+    // Animation initiale du rideau
+    const transitionInitial = document.querySelector('.page-transition-initial');
+    const curtainLeft = document.querySelector('.curtain-left');
+    const curtainRight = document.querySelector('.curtain-right');
+
+    // Fonction pour l'animation initiale du rideau
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            if (curtainLeft && curtainRight) {
+                curtainLeft.style.transform = 'translateX(-100%)';
+                curtainRight.style.transform = 'translateX(100%)';
+
+                // Ajout de l'effet de brillance
+                const shine = document.createElement('div');
+                shine.classList.add('shine-effect');
+                if (transitionInitial) {
+                    transitionInitial.appendChild(shine);
+                }
+            }
+            
+            // Supprime l'élément après l'animation
+            setTimeout(() => {
+                if (transitionInitial) {
+                    transitionInitial.remove();
+                }
+            }, 1500);
+        }, 300);
+    });
+
+    // Fonction pour les transitions entre sections
+    function initPageTransitions() {
+        const transition = document.querySelector('.page-transition');
+        if (!transition) return { startTransition: () => {}, endTransition: () => {} };
+        
+        const panels = {
+            left: transition.querySelector('.transition-panel.left'),
+            right: transition.querySelector('.transition-panel.right')
+        };
+
+        function startTransition() {
+            transition.style.visibility = 'visible';
+            if (panels.left) panels.left.style.transform = 'translateX(0)';
+            if (panels.right) panels.right.style.transform = 'translateX(0)';
+        }
+
+        function endTransition() {
+            if (panels.left) panels.left.style.transform = 'translateX(-100%)';
+            if (panels.right) panels.right.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                transition.style.visibility = 'hidden';
+            }, 600);
+        }
+
+        return { startTransition, endTransition };
+    }
+
+    // ============================================
+    // ANIMATIONS PAR SECTION
+    // ============================================
+    function initSectionAnimations(sectionName) {
+        if (typeof gsap === 'undefined') return;
+
+        switch(sectionName) {
+            case 'hero':
+                const heroTl = gsap.timeline({ delay: 0.2 });
+                
+                // Animation du hero moderne
+                if (document.querySelector('.hero-eyebrow')) {
+                    heroTl.from('.hero-eyebrow', {
+                        duration: 0.8,
+                        y: 30,
+                        opacity: 0,
+                        ease: 'power3.out'
+                    });
+                }
+                
+                if (document.querySelector('.hero-title')) {
+                    heroTl.from('.hero-title', {
+                        duration: 1,
+                        y: 50,
+                        opacity: 0,
+                        ease: 'power3.out'
+                    }, '-=0.4');
+                }
+                
+                if (document.querySelector('.hero-description')) {
+                    heroTl.from('.hero-description', {
+                        duration: 0.8,
+                        y: 30,
+                        opacity: 0,
+                        ease: 'power3.out'
+                    }, '-=0.6');
+                }
+                
+                if (document.querySelector('.cta-group')) {
+                    heroTl.from('.cta-group .btn', {
+                        duration: 0.8,
+                        y: 20,
+                        opacity: 0,
+                        stagger: 0.2,
+                        ease: 'back.out(1.7)'
+                    }, '-=0.4');
+                }
+                
+                // Mouse follow effect
+                const cursor = document.querySelector('.mouse-follow-overlay');
+                if (cursor) {
+                    window.addEventListener('mousemove', (e) => {
+                        const x = e.clientX;
+                        const y = e.clientY;
+                        cursor.style.background = `radial-gradient(600px at ${x}px ${y}px, rgba(59, 130, 246, 0.15), transparent 80%)`;
+                    });
+                }
+                break;
+
+            case 'apropos':
+                gsap.from('.about-text', {
+                    scrollTrigger: {
+                        trigger: '.about-text',
+                        start: 'top 80%',
+                        toggleActions: 'play none none reverse'
+                    },
+                    duration: 1,
+                    y: 50,
+                    opacity: 0,
+                    ease: 'power3.out'
+                });
+
+                gsap.from('.about-details', {
+                    scrollTrigger: {
+                        trigger: '.about-details',
+                        start: 'top 80%'
+                    },
+                    duration: 0.8,
+                    y: 30,
+                    opacity: 0,
+                    ease: 'power3.out'
+                });
+                break;
+
+            case 'competences':
+                gsap.from('.skills-grid .skill-card', {
+                    scrollTrigger: {
+                        trigger: '.skills-grid',
+                        start: 'top 80%'
+                    },
+                    duration: 0.8,
+                    y: 30,
+                    opacity: 0,
+                    stagger: 0.15,
+                    ease: 'power3.out'
+                });
+                break;
+
+            case 'experiences':
+                // Initialiser le carousel expériences
+                setTimeout(() => {
+                    new Carousel('experiencesCarousel', {
+                        prevBtnId: 'experiencesPrev',
+                        nextBtnId: 'experiencesNext',
+                        pageInfoId: 'experiencesPageInfo',
+                        dotsId: 'experiencesDots'
+                    });
+                }, 100);
+
+                // Animation des cartes
+                gsap.from('.experience-card', {
+                    scrollTrigger: {
+                        trigger: '.carousel-container',
+                        start: 'top 80%'
+                    },
+                    duration: 0.8,
+                    y: 30,
+                    opacity: 0,
+                    stagger: 0.15,
+                    ease: 'power3.out'
+                });
+                break;
+
+            case 'projects':
+                // Initialiser le carousel projets
+                setTimeout(() => {
+                    new Carousel('projectsCarousel', {
+                        prevBtnId: 'projectsPrev',
+                        nextBtnId: 'projectsNext',
+                        pageInfoId: 'projectsPageInfo',
+                        dotsId: 'projectsDots'
+                    });
+                }, 100);
+
+                // Animation des cartes
+                gsap.from('.project-card', {
+                    scrollTrigger: {
+                        trigger: '.projects-grid',
+                        start: 'top 80%'
+                    },
+                    duration: 0.8,
+                    y: 30,
+                    opacity: 0,
+                    stagger: 0.1,
+                    ease: 'power3.out'
+                });
+                break;
+
+            case 'passions':
+                gsap.from('.passion-card', {
+                    scrollTrigger: {
+                        trigger: '.passions-grid',
+                        start: 'top 80%'
+                    },
+                    duration: 0.8,
+                    scale: 0.95,
+                    opacity: 0,
+                    stagger: 0.15,
+                    ease: 'power3.out'
+                });
+                break;
+
+            case 'contact':
+                gsap.from('.contact-text', {
+                    scrollTrigger: {
+                        trigger: '.section-contact',
+                        start: 'top 80%'
+                    },
+                    duration: 0.8,
+                    y: 30,
+                    opacity: 0,
+                    ease: 'power3.out'
+                });
+
+                gsap.from('.contact-email', {
+                    scrollTrigger: {
+                        trigger: '.contact-details',
+                        start: 'top 85%'
+                    },
+                    duration: 0.6,
+                    y: 20,
+                    opacity: 0,
+                    ease: 'back.out(1.7)'
+                });
+                break;
+
+            default:
+                // Animations par défaut pour toutes les sections
+                const sectionTitle = document.querySelector('.section-title');
+                if (sectionTitle) {
+                    gsap.from(sectionTitle, {
+                        scrollTrigger: {
+                            trigger: sectionTitle,
+                            start: 'top 80%',
+                            toggleActions: 'play none none reverse'
+                        },
+                        duration: 0.8,
+                        y: 30,
+                        opacity: 0,
+                        ease: 'power3.out'
+                    });
+                }
+                break;
+        }
+    }
+
+    // Écouter l'événement de chargement de section
+    document.addEventListener('section:loaded', (e) => {
+        const sectionName = e.detail.name;
+        console.log('🎯 Section chargée:', sectionName);
+        initSectionAnimations(sectionName);
+    });
+
+    // ============================================
+    // ANIMATION DE LA NAVIGATION
+    // ============================================
+    if (typeof gsap !== 'undefined') {
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            const navTl = gsap.timeline({ delay: 0.5 });
+            
+            navTl
+                .from('.navbar', {
+                    duration: 0.8,
+                    y: -100,
+                    opacity: 0,
+                    ease: 'power4.out'
+                })
+                .from('.nav-menu li', {
+                    duration: 0.5,
+                    y: -20,
+                    opacity: 0,
+                    stagger: 0.1,
+                    ease: 'back.out(1.7)'
+                }, '-=0.3');
+        }
+
+        // Effet de scroll sur la navbar
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (!navbar) return;
+            
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+    }
+
+    // ============================================
+    // NAVIGATION HAMBURGER (MOBILE)
+    // ============================================
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Fermer le menu lors du clic sur un lien
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    }
+
+    // ============================================
+    // TRANSITIONS DE PAGES
+    // ============================================
+    const pageTransitions = initPageTransitions();
+
+    // Listen for navigation events
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const target = link.getAttribute('data-section');
+            if (target) {
+                e.preventDefault();
+                pageTransitions.startTransition();
+                setTimeout(() => {
+                    window.location.hash = link.getAttribute('href');
+                    pageTransitions.endTransition();
+                }, 600);
+            }
+        });
+    });
+
+    // ============================================
+    // NAVIGATION CLAVIER GLOBALE
+    // ============================================
+    document.addEventListener('keydown', (e) => {
+        // Échap pour fermer le menu mobile
+        if (e.key === 'Escape' && navMenu && navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // ============================================
+    // SMOOTH SCROLL POUR LES ANCRES
+    // ============================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && !this.hasAttribute('data-section')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    });
+
+    // ============================================
+    // INTERSECTION OBSERVER POUR LES ANIMATIONS
+    // ============================================
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observer tous les éléments avec la classe .scroll-reveal
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+        observer.observe(el);
+    });
+
+    console.log('✅ Script initialisé avec succès');
+});

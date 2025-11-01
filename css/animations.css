@@ -1,0 +1,339 @@
+/* ============================================
+   ANIMATIONS MODERNES ET SUBTILES
+   ============================================ */
+
+/* Keyframes principales */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animation du gradient (pour backgrounds) */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Animation de pulsation subtile */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Animation de rotation douce */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Effet de brillance qui passe */
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* ============================================
+   CLASSES UTILITAIRES D'ANIMATION
+   ============================================ */
+
+/* États cachés avant animation */
+.hidden-fade {
+    opacity: 0;
+}
+
+.hidden-slide-up {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.hidden-slide-down {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+.hidden-slide-left {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.hidden-slide-right {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.hidden-scale {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+/* Classes d'animation */
+.animate-fade-in {
+    animation: fadeIn 0.6s ease forwards;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 0.8s ease forwards;
+}
+
+.animate-fade-in-left {
+    animation: fadeInLeft 0.8s ease forwards;
+}
+
+.animate-fade-in-right {
+    animation: fadeInRight 0.8s ease forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.6s ease forwards;
+}
+
+/* Délais d'animation */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+.delay-600 { animation-delay: 0.6s; }
+
+/* ============================================
+   EFFETS DE SURVOL
+   ============================================ */
+
+/* Lift effect */
+.hover-lift {
+    transition: transform var(--transition-base);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+/* Grow effect */
+.hover-grow {
+    transition: transform var(--transition-base);
+}
+
+.hover-grow:hover {
+    transform: scale(1.05);
+}
+
+/* Glow effect */
+.hover-glow {
+    transition: box-shadow var(--transition-base);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-glow);
+}
+
+/* Brightness effect */
+.hover-brightness {
+    transition: filter var(--transition-base);
+}
+
+.hover-brightness:hover {
+    filter: brightness(1.1);
+}
+
+/* ============================================
+   TRANSITIONS FLUIDES
+   ============================================ */
+
+.smooth-transition {
+    transition: all var(--transition-base);
+}
+
+.smooth-transition-fast {
+    transition: all var(--transition-fast);
+}
+
+.smooth-transition-slow {
+    transition: all var(--transition-slow);
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--couleur-accent);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: rotate 0.8s linear infinite;
+}
+
+/* ============================================
+   SCROLL ANIMATIONS (avec Intersection Observer)
+   ============================================ */
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================
+   EFFETS DE PAGE TRANSITION
+   ============================================ */
+
+.page-transition {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.page-transition.is-transitioning {
+    visibility: visible;
+    pointer-events: all;
+}
+
+.transition-panel {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: var(--couleur-fond);
+    transition: transform 0.6s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.transition-panel.left {
+    left: 0;
+    transform: translateX(-100%);
+}
+
+.transition-panel.right {
+    right: 0;
+    transform: translateX(100%);
+}
+
+.page-transition.is-transitioning .transition-panel {
+    transform: translateX(0);
+}
+
+/* ============================================
+   RESPONSIVE - Désactiver certaines animations
+   ============================================ */
+
+@media (max-width: 768px) {
+    .hover-lift:hover,
+    .hover-grow:hover {
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .scroll-reveal {
+        opacity: 1;
+        transform: none;
+    }
+}
