@@ -413,45 +413,45 @@ document.addEventListener('DOMContentLoaded', function() {
             ease: 'power3.out'
         });
         
-        // Formations - Animation indépendante
+        // Formations - Animation indépendante (nouvelles cartes style Sabani)
         const formationsSection = document.querySelector('#formations');
         if (formationsSection) {
-            const formationsCards = formationsSection.querySelectorAll('.passion-card');
+            const formationsCards = formationsSection.querySelectorAll('.formation-item');
             gsap.to(formationsCards, {
                 scrollTrigger: {
                     trigger: '#formations',
                     start: 'top 70%',
                     end: 'bottom 30%',
                     toggleActions: 'play reverse play reverse',
-                    onEnter: () => gsap.set(formationsCards, { scale: 0.8, opacity: 0 }),
-                    onEnterBack: () => gsap.set(formationsCards, { scale: 0.8, opacity: 0 })
+                    onEnter: () => gsap.set(formationsCards, { y: 60, opacity: 0 }),
+                    onEnterBack: () => gsap.set(formationsCards, { y: 60, opacity: 0 })
                 },
                 duration: 0.8,
-                scale: 1,
+                y: 0,
                 opacity: 1,
-                stagger: 0.1,
-                ease: 'back.out(1.7)'
+                stagger: 0.15,
+                ease: 'power3.out'
             });
         }
         
-        // Formations Autres - Animation indépendante
+        // Formations Autres - Animation indépendante (nouvelles cartes style Sabani)
         const formationsAutresSection = document.querySelector('#formations-autres');
         if (formationsAutresSection) {
-            const formationsAutresCards = formationsAutresSection.querySelectorAll('.passion-card');
+            const formationsAutresCards = formationsAutresSection.querySelectorAll('.formation-item');
             gsap.to(formationsAutresCards, {
                 scrollTrigger: {
                     trigger: '#formations-autres',
                     start: 'top 70%',
                     end: 'bottom 30%',
                     toggleActions: 'play reverse play reverse',
-                    onEnter: () => gsap.set(formationsAutresCards, { scale: 0.8, opacity: 0 }),
-                    onEnterBack: () => gsap.set(formationsAutresCards, { scale: 0.8, opacity: 0 })
+                    onEnter: () => gsap.set(formationsAutresCards, { y: 60, opacity: 0 }),
+                    onEnterBack: () => gsap.set(formationsAutresCards, { y: 60, opacity: 0 })
                 },
                 duration: 0.8,
-                scale: 1,
+                y: 0,
                 opacity: 1,
-                stagger: 0.1,
-                ease: 'back.out(1.7)'
+                stagger: 0.15,
+                ease: 'power3.out'
             });
         }
         
