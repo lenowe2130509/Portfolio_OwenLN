@@ -1110,3 +1110,21 @@ a {
         --carousel-item-height: 10rem;
     }
 }
+
+/* ============================================
+   VISIBILITÉ INITIALE DES ANIMATIONS
+   ============================================ */
+
+/* Cacher les éléments avant l'animation */
+.hero-title,
+.hero-subtitle,
+.cta-button,
+.apropos-text,
+.stat-card,
+.carousel-3d,
+.experience-card,
+.passion-card,
+.contact-text,
+.contact-btn {
+    opacity: 0;
+}
