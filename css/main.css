@@ -1974,3 +1974,189 @@ a {
         font-size: 3rem;
     }
 }
+
+
+/* ============================================
+   SECTION FRAMEWORKS - CAROUSEL INFINI PLEINE LARGEUR
+   À ajouter à la fin de main.css
+   ============================================ */
+
+.section-frameworks {
+    width: 100%;
+    padding: 4rem 0;
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+    position: relative;
+    border-top: 1px solid var(--couleur-border);
+    border-bottom: 1px solid var(--couleur-border);
+}
+
+.frameworks-wrapper {
+    width: 100%;
+    position: relative;
+}
+
+/* Carousel container - Pleine largeur */
+.frameworks-carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Track qui contient les logos */
+.frameworks-track {
+    display: flex;
+    gap: 6rem;
+    animation: infinite-scroll 40s linear infinite;
+    width: fit-content;
+}
+
+/* Animation de défilement infini fluide */
+@keyframes infinite-scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pause au hover sur toute la section */
+.section-frameworks:hover .frameworks-track {
+    animation-play-state: paused;
+}
+
+/* Item individuel - Minimaliste */
+.framework-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    height: 80px;
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+/* Logo du framework */
+.framework-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    filter: grayscale(70%) opacity(0.6);
+    transition: all var(--transition-base);
+}
+
+/* Logo sombre (pour Express, GitHub, etc.) */
+.framework-item img.logo-dark {
+    filter: grayscale(70%) opacity(0.6) invert(1);
+}
+
+/* Effet hover sur le logo */
+.framework-item:hover img {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.2);
+}
+
+.framework-item:hover img.logo-dark {
+    filter: grayscale(0%) opacity(1) invert(1);
+    transform: scale(1.2);
+}
+
+/* Dégradés sur les bords pour effet de fondu */
+.frameworks-carousel::before,
+.frameworks-carousel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 150px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.frameworks-carousel::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+.frameworks-carousel::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .section-frameworks {
+        padding: 3rem 0;
+    }
+    
+    .frameworks-track {
+        gap: 4rem;
+        animation-duration: 35s;
+    }
+    
+    .framework-item {
+        min-width: 70px;
+        height: 70px;
+    }
+    
+    .framework-item img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-frameworks {
+        padding: 2.5rem 0;
+    }
+    
+    .frameworks-track {
+        gap: 3rem;
+        animation-duration: 30s;
+    }
+    
+    .framework-item {
+        min-width: 60px;
+        height: 60px;
+    }
+    
+    .framework-item img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .frameworks-carousel::before,
+    .frameworks-carousel::after {
+        width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-frameworks {
+        padding: 2rem 0;
+    }
+    
+    .frameworks-track {
+        gap: 2rem;
+        animation-duration: 25s;
+    }
+    
+    .framework-item {
+        min-width: 50px;
+        height: 50px;
+    }
+    
+    .framework-item img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .frameworks-carousel::before,
+    .frameworks-carousel::after {
+        width: 50px;
+    }
+}
