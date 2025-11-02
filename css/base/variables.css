@@ -1,0 +1,50 @@
+/* ============================================
+   VARIABLES CSS
+   ============================================ */
+
+:root {
+    /* Couleurs - Palette épurée */
+    --couleur-fond: #0f0f0f;
+    --couleur-texte: #ffffff;
+    --couleur-texte-dim: #8a8a8a;
+    --couleur-accent: #ffffff;
+    --couleur-border: rgba(255, 255, 255, 0.1);
+    --couleur-overlay: rgba(20, 20, 20, 0.9);
+    
+    /* Typographie - Impact fort */
+    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    --font-display: 'Arial Black', 'Arial Bold', sans-serif;
+    
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 2rem;
+    --text-3xl: 2.5rem;
+    --text-4xl: 3.5rem;
+    --text-5xl: 5rem;
+    --text-hero: clamp(3rem, 10vw, 8rem);
+    
+    /* Espacements généreux */
+    --espacement-xs: 0.5rem;
+    --espacement-sm: 1rem;
+    --espacement-md: 1.5rem;
+    --espacement-lg: 2rem;
+    --espacement-xl: 3rem;
+    --espacement-2xl: 5rem;
+    --espacement-3xl: 8rem;
+    
+    /* Bordures minimales */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    
+    /* Transitions rapides */
+    --transition-fast: 200ms cubic-bezier(0.22, 1, 0.36, 1);
+    --transition-base: 400ms cubic-bezier(0.22, 1, 0.36, 1);
+    
+    /* Carrousel 3D */
+    --carousel-item-width: 14rem;
+    --carousel-item-height: 18rem;
+    --carousel-diameter: 50rem;
+}

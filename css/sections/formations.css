@@ -1,0 +1,150 @@
+/* ============================================
+   FORMATIONS STYLE ROMAIN SABANI
+   ============================================ */
+
+.section-formations,
+.section-formations-autres {
+    padding: var(--espacement-3xl) 0;
+}
+
+.section-formations-autres {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.formations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.formation-item {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.formation-item:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-8px) translateZ(0);
+}
+
+.formation-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.3;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.formation-item:hover .formation-image {
+    transform: scale(1.05) translateZ(0);
+    opacity: 0.5;
+}
+
+.formation-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 15, 15, 0.3) 0%,
+        rgba(15, 15, 15, 0.95) 100%
+    );
+    z-index: 1;
+}
+
+.formation-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.formation-category {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    width: fit-content;
+    transition: all 0.3s ease;
+}
+
+.formation-item:hover .formation-category {
+    background: white;
+    color: #0f0f0f;
+    border-color: white;
+}
+
+.formation-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.formation-school {
+    font-size: 1rem;
+    color: #b0b0b0;
+    margin-bottom: 0.5rem;
+}
+
+.formation-date {
+    font-size: 0.875rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.formation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.formation-item:hover .formation-tags {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.formation-tag {
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Séparateur entre sections */
+.section-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 6rem 0;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -1,0 +1,100 @@
+/* ============================================
+   SECTION PASSIONS
+   ============================================ */
+
+.section-passions {
+    padding: var(--espacement-3xl) 0;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.passions-grid-visual {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.passion-visual-card {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.passion-visual-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-8px) translateZ(0);
+}
+
+.passion-visual-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.4;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.passion-visual-card:hover .passion-visual-image {
+    transform: scale(1.08) translateZ(0);
+    opacity: 0.6;
+}
+
+.passion-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 15, 15, 0.2) 0%,
+        rgba(15, 15, 15, 0.9) 100%
+    );
+    z-index: 1;
+}
+
+.passion-visual-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.passion-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.passion-visual-card:hover .passion-icon {
+    transform: scale(1.2);
+}
+
+.passion-visual-title {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.passion-visual-desc {
+    font-size: 1rem;
+    color: #8a8a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+}

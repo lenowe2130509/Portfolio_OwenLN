@@ -1,15 +1,32 @@
+<!-- Navigation Responsive -->
 <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">Owen.LN</div>
-            <ul class="nav-menu">
-                <li><a href="#accueil">Accueil</a></li>
-                <li><a href="#apropos">À propos</a></li>
-                <li><a href="#competences">Compétences</a></li>
-                <li><a href="#experiences">Expériences</a></li>
-                <li><a href="#formations">Formations</a></li>
-                <li><a href="#passions">Passions</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li class="nav-cv"><a href="documents/CV_Owen_LE_NADANT.pdf" target="_blank" rel="noopener noreferrer">CV</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="nav-container">
+        <div class="logo">Owen.LN</div>
+        
+        <!-- Bouton Hamburger -->
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <!-- Menu Navigation -->
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#accueil" class="nav-link">Accueil</a></li>
+            <li><a href="#apropos" class="nav-link">À propos</a></li>
+            <li><a href="#competences" class="nav-link">Compétences</a></li>
+            <li><a href="#experiences" class="nav-link">Expériences</a></li>
+            <li><a href="#formations" class="nav-link">Formations</a></li>
+            <li><a href="#passions" class="nav-link">Passions</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+            <li class="nav-cv">
+                <a href="documents/CV_Owen_LE_NADANT.pdf" target="_blank" rel="noopener noreferrer" class="nav-link">
+                    CV
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Overlay pour fermer le menu en cliquant à côté -->
+        <div class="nav-overlay" id="navOverlay"></div>
+    </div>
+</nav>

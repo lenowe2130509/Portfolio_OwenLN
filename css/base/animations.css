@@ -1,0 +1,113 @@
+/* ============================================
+   ANIMATIONS GLOBALES
+   ============================================ */
+
+/* Animation de rideau au chargement */
+.page-transition-initial {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.curtain {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: white;
+    transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.curtain-left {
+    left: 0;
+}
+
+.curtain-right {
+    right: 0;
+}
+
+/* Animations au chargement de la page */
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInControls {
+    to { 
+        opacity: 1; 
+    }
+}
+
+/* Effet de pulsation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Préférence pour les animations réduites */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .carousel-track,
+    .experience-card,
+    .carousel-btn,
+    .skill-badge,
+    .dot {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Visibilité initiale des éléments animés */
+.hero-title,
+.hero-subtitle,
+.cta-button,
+.apropos-text,
+.stat-card,
+.carousel-3d,
+.experience-card,
+.passion-visual-card,
+.contact-text,
+.contact-btn {
+    opacity: 0;
+}
+
+.hero-title.gsap-animated,
+.hero-subtitle.gsap-animated,
+.cta-button.gsap-animated,
+.apropos-text.gsap-animated,
+.stat-card.gsap-animated,
+.carousel-3d.gsap-animated,
+.experience-card.gsap-animated,
+.passion-visual-card.gsap-animated,
+.contact-text.gsap-animated,
+.contact-btn.gsap-animated {
+    opacity: 1;
+}

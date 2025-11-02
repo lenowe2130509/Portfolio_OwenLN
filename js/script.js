@@ -664,13 +664,30 @@ function initializePortfolio() {
     });
 
     // ============================================
-    // INITIALISATION CAROUSELS
+    // INITIALISATION CAROUSELS - CORRIGÉ
     // ============================================
     setTimeout(() => {
-        // Carousel expériences
-        if (document.querySelector('.carousel-track')) {
-            experienceCarousel = new ExperienceCarousel();
-            console.log('✅ Carousel expériences initialisé');
+        // Carousel expériences - avec vérification multiple
+        const checkAndInitExperiences = () => {
+            const track = document.querySelector('.carousel-track');
+            const items = document.querySelectorAll('.carousel-item-exp');
+            
+            if (track && items.length > 0) {
+                experienceCarousel = new ExperienceCarousel();
+                console.log('✅ Carousel expériences initialisé');
+                return true;
+            }
+            return false;
+        };
+        
+        // Essayer d'initialiser immédiatement
+        if (!checkAndInitExperiences()) {
+            // Si ça ne marche pas, réessayer après 500ms
+            setTimeout(() => {
+                if (!checkAndInitExperiences()) {
+                    console.warn('⚠️ Carousel expériences non initialisé - éléments manquants');
+                }
+            }, 500);
         }
         
         // Carousel 3D Sekai
@@ -752,7 +769,7 @@ document.addEventListener('sectionsLoaded', () => {
     // Attendre un peu pour que le DOM soit bien prêt
     setTimeout(() => {
         initializePortfolio();
-    }, 100);
+    }, 200);
 });
 
 // Fallback au cas où le loader ne fonctionne pas
