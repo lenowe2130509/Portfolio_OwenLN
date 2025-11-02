@@ -33,7 +33,6 @@ export class ExperienceCarousel {
     
     createDots() {
         if (!this.dotsContainer) return;
-        
         this.dotsContainer.innerHTML = '';
         
         for (let i = 0; i < this.totalPages; i++) {
@@ -91,7 +90,6 @@ export class ExperienceCarousel {
             this.isTransitioning = true;
             this.currentIndex = index;
             this.updateCarousel();
-            
             setTimeout(() => {
                 this.isTransitioning = false;
             }, 600);
@@ -112,11 +110,9 @@ export class ExperienceCarousel {
     
     setupSwipeGestures() {
         if (!this.track) return;
-        
         this.track.addEventListener('touchstart', (e) => {
             this.touchStartX = e.changedTouches[0].screenX;
         });
-        
         this.track.addEventListener('touchend', (e) => {
             this.touchEndX = e.changedTouches[0].screenX;
             this.handleSwipe();
@@ -126,7 +122,6 @@ export class ExperienceCarousel {
     handleSwipe() {
         const swipeThreshold = 50;
         const diff = this.touchStartX - this.touchEndX;
-        
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
                 this.next();
@@ -140,10 +135,8 @@ export class ExperienceCarousel {
         document.addEventListener('keydown', (e) => {
             const experiencesSection = document.querySelector('.section-experiences');
             if (!experiencesSection) return;
-            
             const rect = experiencesSection.getBoundingClientRect();
             const isInView = rect.top < window.innerHeight && rect.bottom >= 0;
-            
             if (isInView) {
                 if (e.key === 'ArrowLeft') {
                     e.preventDefault();
@@ -160,7 +153,6 @@ export class ExperienceCarousel {
         if (this.prevBtn) {
             this.prevBtn.addEventListener('click', () => this.prev());
         }
-        
         if (this.nextBtn) {
             this.nextBtn.addEventListener('click', () => this.next());
         }

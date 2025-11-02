@@ -66,32 +66,18 @@ export class SekaiCarousel3D {
     }
     
     setupDragInteraction() {
-        this.carousel.addEventListener('mousedown', (e) => {
-            this.onDragStart(e);
-        });
+        this.carousel.addEventListener('mousedown', (e) => this.onDragStart(e));
+        document.addEventListener('mousemove', (e) => this.onDragMove(e));
+        document.addEventListener('mouseup', () => this.onDragEnd());
         
-        document.addEventListener('mousemove', (e) => {
-            this.onDragMove(e);
-        });
-        
-        document.addEventListener('mouseup', () => {
-            this.onDragEnd();
-        });
-        
-        this.carousel.addEventListener('touchstart', (e) => {
-            this.onDragStart(e.touches[0]);
-        });
-        
+        this.carousel.addEventListener('touchstart', (e) => this.onDragStart(e.touches[0]));
         document.addEventListener('touchmove', (e) => {
             if (this.isDragging) {
                 e.preventDefault();
                 this.onDragMove(e.touches[0]);
             }
         }, { passive: false });
-        
-        document.addEventListener('touchend', () => {
-            this.onDragEnd();
-        });
+        document.addEventListener('touchend', () => this.onDragEnd());
         
         this.carousel.addEventListener('selectstart', (e) => e.preventDefault());
     }
@@ -116,21 +102,15 @@ export class SekaiCarousel3D {
         const deltaY = e.clientY - this.startY;
         const rotationChangeX = deltaY * 0.15;
         this.targetRotationX = this.startRotationX - rotationChangeX;
-        
         this.targetRotationX = Math.max(-30, Math.min(30, this.targetRotationX));
     }
     
     onDragEnd() {
         if (!this.isDragging) return;
-        
         this.isDragging = false;
         this.carousel.classList.remove('dragging');
-        
         this.targetRotationX = 0;
-        
-        setTimeout(() => {
-            this.startAutoRotation();
-        }, 2000);
+        setTimeout(() => this.startAutoRotation(), 2000);
     }
     
     rotateBy(degreesY, degreesX) {
@@ -162,7 +142,6 @@ export class SekaiCarousel3D {
         }
         
         this.updateFrontCards();
-        
         this.animationFrame = requestAnimationFrame(() => this.animate());
     }
     
@@ -170,7 +149,6 @@ export class SekaiCarousel3D {
         const normalizedRotation = ((this.currentRotationY % 360) + 360) % 360;
         const totalCards = this.items.length;
         const degreesPerCard = 360 / totalCards;
-        
         let frontCardIndex = Math.round((360 - normalizedRotation) / degreesPerCard) % totalCards;
         
         this.items.forEach((item, index) => {
