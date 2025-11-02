@@ -190,9 +190,8 @@ class SekaiCarousel3D {
 }
 
 // ============================================
-// CAROUSEL EXPÉRIENCES - VERSION CORRIGÉE
+// CAROUSEL EXPÉRIENCES - VERSION OPTIMISÉE AVEC TRANSITIONS FLUIDES
 // ============================================
-
 class ExperienceCarousel {
     constructor() {
         this.track = document.querySelector('.carousel-track');
@@ -214,7 +213,7 @@ class ExperienceCarousel {
     }
     
     init() {
-        console.log('✅ Carousel expériences initialisé avec', this.totalPages, 'pages');
+        console.log('✅ Carousel expériences initialisé');
         this.createDots();
         this.updateCarousel();
         this.attachEvents();
@@ -224,8 +223,6 @@ class ExperienceCarousel {
     
     createDots() {
         if (!this.dotsContainer) return;
-        
-        this.dotsContainer.innerHTML = '';
         
         for (let i = 0; i < this.totalPages; i++) {
             const dot = document.createElement('div');
@@ -243,13 +240,16 @@ class ExperienceCarousel {
         const offset = -this.currentIndex * 100;
         this.track.style.transform = `translateX(${offset}%)`;
         
+        // Mettre à jour les boutons
         if (this.prevBtn) this.prevBtn.disabled = this.currentIndex === 0;
         if (this.nextBtn) this.nextBtn.disabled = this.currentIndex === this.totalPages - 1;
         
+        // Mettre à jour l'indicateur de page
         if (this.pageInfo) {
             this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
         }
         
+        // Mettre à jour les dots
         if (this.dotsContainer) {
             const dots = this.dotsContainer.querySelectorAll('.dot');
             dots.forEach((dot, index) => {
@@ -257,6 +257,7 @@ class ExperienceCarousel {
             });
         }
         
+        // Animer les cartes de la page actuelle
         this.animateCurrentPageCards();
     }
     
@@ -290,20 +291,14 @@ class ExperienceCarousel {
     }
     
     prev() {
-        if (this.currentIndex > 0) {
-            this.goToPage(this.currentIndex - 1);
-        }
+        this.goToPage(this.currentIndex - 1);
     }
     
     next() {
-        if (this.currentIndex < this.totalPages - 1) {
-            this.goToPage(this.currentIndex + 1);
-        }
+        this.goToPage(this.currentIndex + 1);
     }
     
     setupSwipeGestures() {
-        if (!this.track) return;
-        
         this.track.addEventListener('touchstart', (e) => {
             this.touchStartX = e.changedTouches[0].screenX;
         });
@@ -320,8 +315,10 @@ class ExperienceCarousel {
         
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0) {
+                // Swipe left - next
                 this.next();
             } else {
+                // Swipe right - prev
                 this.prev();
             }
         }
@@ -329,44 +326,28 @@ class ExperienceCarousel {
     
     setupKeyboardNavigation() {
         document.addEventListener('keydown', (e) => {
-            const experiencesSection = document.querySelector('.section-experiences');
-            if (!experiencesSection) return;
-            
-            const rect = experiencesSection.getBoundingClientRect();
-            const isInView = rect.top < window.innerHeight && rect.bottom >= 0;
-            
-            if (isInView) {
-                if (e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    this.prev();
-                } else if (e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    this.next();
-                }
+            if (e.key === 'ArrowLeft') {
+                this.prev();
+            } else if (e.key === 'ArrowRight') {
+                this.next();
             }
         });
     }
     
     attachEvents() {
-        if (this.prevBtn) {
-            this.prevBtn.addEventListener('click', () => this.prev());
-        }
-        
-        if (this.nextBtn) {
-            this.nextBtn.addEventListener('click', () => this.next());
-        }
+        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prev());
+        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.next());
     }
 }
 
 // ============================================
-// FONCTION D'INITIALISATION PRINCIPALE
+// INITIALISATION PRINCIPALE
 // ============================================
-
 let sekaiCarousel = null;
 let experienceCarousel = null;
 
-function initializePortfolio() {
-    console.log('📄 Initialisation du portfolio...');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('📄 DOM chargé');
     
     // ============================================
     // ANIMATION DU RIDEAU
@@ -375,21 +356,23 @@ function initializePortfolio() {
     const curtainLeft = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
 
-    setTimeout(() => {
-        if (curtainLeft && curtainRight) {
-            curtainLeft.style.transform = 'translateX(-100%)';
-            curtainRight.style.transform = 'translateX(100%)';
-        }
-        
+    window.addEventListener('load', () => {
         setTimeout(() => {
-            if (transitionInitial) {
-                transitionInitial.remove();
+            if (curtainLeft && curtainRight) {
+                curtainLeft.style.transform = 'translateX(-100%)';
+                curtainRight.style.transform = 'translateX(100%)';
             }
             
-            initGSAPAnimations();
-            
-        }, 1200);
-    }, 300);
+            setTimeout(() => {
+                if (transitionInitial) {
+                    transitionInitial.remove();
+                }
+                
+                initGSAPAnimations();
+                
+            }, 1200);
+        }, 300);
+    });
 
     // ============================================
     // FONCTION POUR INITIALISER LES ANIMATIONS GSAP
@@ -407,7 +390,7 @@ function initializePortfolio() {
             ScrollTrigger.refresh();
         }, 100);
         
-        // Hero
+        // Hero - Animations avec délais optimisés
         gsap.fromTo('.hero-title', 
             { y: 80, opacity: 0 },
             { 
@@ -430,7 +413,7 @@ function initializePortfolio() {
             }
         );
         
-        gsap.fromTo('.cta-button',
+        gsap.fromTo('.hero-buttons',
             { y: 20, opacity: 0 },
             {
                 duration: 0.8,
@@ -489,7 +472,7 @@ function initializePortfolio() {
             }
         );
         
-        // Expériences
+        // Expériences - Animation optimisée
         gsap.fromTo('.section-header',
             { y: 30, opacity: 0 },
             {
@@ -633,17 +616,15 @@ function initializePortfolio() {
     // ============================================
     const navbar = document.querySelector('.navbar');
     
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    }
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
 
     // ============================================
     // SMOOTH SCROLL
@@ -667,7 +648,7 @@ function initializePortfolio() {
     // INITIALISATION CAROUSELS
     // ============================================
     setTimeout(() => {
-        // Carousel expériences
+        // Carousel expériences - NOUVELLE VERSION
         if (document.querySelector('.carousel-track')) {
             experienceCarousel = new ExperienceCarousel();
             console.log('✅ Carousel expériences initialisé');
@@ -736,32 +717,7 @@ function initializePortfolio() {
     // ============================================
     // DEBUG
     // ============================================
-    console.log('✨ Portfolio Owen Le Nadant - Initialisé');
+    console.log('✨ Portfolio Owen Le Nadant - Version Optimisée');
     console.log('🎪 Carousel 3D:', sekaiCarousel ? 'ACTIF ✅' : 'INACTIF ❌');
     console.log('💼 Carousel Expériences:', experienceCarousel ? 'ACTIF ✅' : 'INACTIF ❌');
-}
-
-// ============================================
-// ÉCOUTER L'ÉVÉNEMENT DE CHARGEMENT DES SECTIONS
-// ============================================
-
-// Attendre que toutes les sections soient chargées
-document.addEventListener('sectionsLoaded', () => {
-    console.log('✨ Sections chargées - Initialisation du portfolio');
-    
-    // Attendre un peu pour que le DOM soit bien prêt
-    setTimeout(() => {
-        initializePortfolio();
-    }, 100);
-});
-
-// Fallback au cas où le loader ne fonctionne pas
-window.addEventListener('load', () => {
-    // Si après 2 secondes le portfolio n'est pas initialisé, on force l'initialisation
-    setTimeout(() => {
-        if (!sekaiCarousel && !experienceCarousel) {
-            console.warn('⚠️ Initialisation de secours...');
-            initializePortfolio();
-        }
-    }, 2000);
 });
