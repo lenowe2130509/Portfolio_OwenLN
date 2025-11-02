@@ -131,6 +131,45 @@ a {
     opacity: 0.6;
 }
 
+/* Élément de menu CV avec style distinctif */
+.nav-cv a {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.nav-cv a:hover {
+    background: white;
+    color: var(--couleur-fond);
+    border-color: white;
+    opacity: 1;
+}
+
+/* Variante avec effet de remplissage */
+.nav-cv a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-base);
+    z-index: -1;
+}
+
+.nav-cv a:hover::before {
+    transform: scaleX(1);
+}
+
+/* Ajustement pour mobile */
+@media (max-width: 768px) {
+    .nav-cv a {
+        padding: 0.4rem 1rem;
+        font-size: var(--text-xs);
+    }
+}
 /* ============================================
    HERO - Typographie monumentale
    ============================================ */
@@ -1313,4 +1352,625 @@ a {
 .contact-text.gsap-animated,
 .contact-btn.gsap-animated {
     opacity: 1;
+}
+
+/* ============================================
+   FORMATIONS STYLE ROMAIN SABANI
+   À ajouter à la fin de main.css
+   ============================================ */
+
+/* FONDU SUR L'IMAGE HERO */
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent 0%, #0f0f0f 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Grille de formations style Sabani */
+.formations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Carte de formation */
+.formation-item {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.formation-item:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-8px);
+}
+
+/* Image de fond */
+.formation-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.3;
+}
+
+.formation-item:hover .formation-image {
+    transform: scale(1.05);
+    opacity: 0.5;
+}
+
+/* Overlay gradient */
+.formation-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 15, 15, 0.3) 0%,
+        rgba(15, 15, 15, 0.95) 100%
+    );
+    z-index: 1;
+}
+
+/* Contenu */
+.formation-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Badge catégorie */
+.formation-category {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    width: fit-content;
+    transition: all 0.3s ease;
+}
+
+.formation-item:hover .formation-category {
+    background: white;
+    color: #0f0f0f;
+    border-color: white;
+}
+
+/* Titre */
+.formation-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+/* Établissement */
+.formation-school {
+    font-size: 1rem;
+    color: #b0b0b0;
+    margin-bottom: 0.5rem;
+}
+
+/* Date */
+.formation-date {
+    font-size: 0.875rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tags */
+.formation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.formation-item:hover .formation-tags {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.formation-tag {
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Séparateur de sections */
+.section-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 6rem 0;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Ajuster les sections formations */
+.section-formations,
+.section-formations-autres {
+    padding: var(--espacement-3xl) 0;
+}
+
+.section-formations-autres {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   PASSIONS VISUELLES STYLE SABANI
+   ============================================ */
+
+.passions-grid-visual {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.passion-visual-card {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.passion-visual-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-8px);
+}
+
+.passion-visual-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.4;
+}
+
+.passion-visual-card:hover .passion-visual-image {
+    transform: scale(1.08);
+    opacity: 0.6;
+}
+
+.passion-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 15, 15, 0.2) 0%,
+        rgba(15, 15, 15, 0.9) 100%
+    );
+    z-index: 1;
+}
+
+.passion-visual-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.passion-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.passion-visual-card:hover .passion-icon {
+    transform: scale(1.2);
+}
+
+.passion-visual-title {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.passion-visual-desc {
+    font-size: 1rem;
+    color: #8a8a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .formations-grid,
+    .passions-grid-visual {
+        grid-template-columns: 1fr;
+    }
+
+    .formation-title {
+        font-size: 1.5rem;
+    }
+
+    .formation-content,
+    .passion-visual-content {
+        padding: 1.5rem;
+    }
+    
+    .passion-visual-title {
+        font-size: 1.5rem;
+    }
+    
+    .passion-icon {
+        font-size: 3rem;
+    }
+}
+
+
+/* ============================================
+   VISIBILITÉ INITIALE DES ANIMATIONS
+   À ajouter à la fin de main.css
+   ============================================ */
+
+/* Cacher les éléments avant l'animation */
+.hero-title,
+.hero-subtitle,
+.cta-button,
+.apropos-text,
+.stat-card,
+.carousel-3d,
+.experience-card,
+.passion-card,
+.contact-text,
+.contact-btn {
+    opacity: 0;
+}
+
+/* Les éléments deviennent visibles après l'animation GSAP */
+.hero-title.gsap-animated,
+.hero-subtitle.gsap-animated,
+.cta-button.gsap-animated,
+.apropos-text.gsap-animated,
+.stat-card.gsap-animated,
+.carousel-3d.gsap-animated,
+.experience-card.gsap-animated,
+.passion-card.gsap-animated,
+.contact-text.gsap-animated,
+.contact-btn.gsap-animated {
+    opacity: 1;
+}
+
+/* ============================================
+   FORMATIONS STYLE ROMAIN SABANI
+   À ajouter à la fin de main.css
+   ============================================ */
+
+/* FONDU SUR L'IMAGE HERO */
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent 0%, #0f0f0f 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Performance - Utiliser will-change pour les animations */
+.formation-item,
+.passion-visual-card {
+    will-change: transform, opacity;
+}
+
+/* Grille de formations style Sabani */
+.formations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Carte de formation */
+.formation-item {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateZ(0); /* Force GPU acceleration */
+    backface-visibility: hidden;
+}
+
+.formation-item:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-8px) translateZ(0);
+}
+
+/* Image de fond */
+.formation-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.3;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.formation-item:hover .formation-image {
+    transform: scale(1.05) translateZ(0);
+    opacity: 0.5;
+}
+
+/* Overlay gradient */
+.formation-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 15, 15, 0.3) 0%,
+        rgba(15, 15, 15, 0.95) 100%
+    );
+    z-index: 1;
+}
+
+/* Contenu */
+.formation-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Badge catégorie */
+.formation-category {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    width: fit-content;
+    transition: all 0.3s ease;
+}
+
+.formation-item:hover .formation-category {
+    background: white;
+    color: #0f0f0f;
+    border-color: white;
+}
+
+/* Titre */
+.formation-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+/* Établissement */
+.formation-school {
+    font-size: 1rem;
+    color: #b0b0b0;
+    margin-bottom: 0.5rem;
+}
+
+/* Date */
+.formation-date {
+    font-size: 0.875rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tags */
+.formation-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.formation-item:hover .formation-tags {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.formation-tag {
+    padding: 0.3rem 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Séparateur de sections */
+.section-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 6rem 0;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Ajuster les sections formations */
+.section-formations,
+.section-formations-autres {
+    padding: var(--espacement-3xl) 0;
+}
+
+.section-formations-autres {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================
+   PASSIONS VISUELLES STYLE SABANI
+   ============================================ */
+
+.passions-grid-visual {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.passion-visual-card {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.passion-visual-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-8px) translateZ(0);
+}
+
+.passion-visual-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0.4;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+.passion-visual-card:hover .passion-visual-image {
+    transform: scale(1.08) translateZ(0);
+    opacity: 0.6;
+}
+
+.passion-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 15, 15, 0.2) 0%,
+        rgba(15, 15, 15, 0.9) 100%
+    );
+    z-index: 1;
+}
+
+.passion-visual-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.passion-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.passion-visual-card:hover .passion-icon {
+    transform: scale(1.2);
+}
+
+.passion-visual-title {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.passion-visual-desc {
+    font-size: 1rem;
+    color: #8a8a8a;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .formations-grid,
+    .passions-grid-visual {
+        grid-template-columns: 1fr;
+    }
+
+    .formation-title {
+        font-size: 1.5rem;
+    }
+
+    .formation-content,
+    .passion-visual-content {
+        padding: 1.5rem;
+    }
+    
+    .passion-visual-title {
+        font-size: 1.5rem;
+    }
+    
+    .passion-icon {
+        font-size: 3rem;
+    }
 }

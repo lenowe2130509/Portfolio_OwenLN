@@ -318,195 +318,217 @@ document.addEventListener('DOMContentLoaded', function() {
             ScrollTrigger.refresh();
         }, 100);
         
-        // Définir les positions de départ avant les animations
-        gsap.set('.hero-title', { y: 80 });
-        gsap.set('.hero-subtitle', { y: 30 });
-        gsap.set('.cta-button', { y: 20 });
+        // Hero - Animations directes (pas de ScrollTrigger)
+        gsap.fromTo('.hero-title', 
+            { y: 80, opacity: 0 },
+            { 
+                duration: 1,
+                y: 0,
+                opacity: 1,
+                ease: 'power4.out',
+                delay: 0.2
+            }
+        );
         
-        // Hero - Animations avec opacité finale
-        gsap.to('.hero-title', {
-            duration: 1,
-            y: 0,
-            opacity: 1,
-            ease: 'power4.out',
-            delay: 0.2
-        });
+        gsap.fromTo('.hero-subtitle',
+            { y: 30, opacity: 0 },
+            {
+                duration: 0.8,
+                y: 0,
+                opacity: 1,
+                ease: 'power3.out',
+                delay: 0.5
+            }
+        );
         
-        gsap.to('.hero-subtitle', {
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out',
-            delay: 0.5
-        });
-        
-        gsap.to('.cta-button', {
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            ease: 'back.out(1.7)',
-            delay: 0.8
-        });
+        gsap.fromTo('.cta-button',
+            { y: 20, opacity: 0 },
+            {
+                duration: 0.8,
+                y: 0,
+                opacity: 1,
+                ease: 'back.out(1.7)',
+                delay: 0.8
+            }
+        );
         
         // À propos
-        gsap.to('.apropos-text', {
-            scrollTrigger: {
-                trigger: '.section-apropos',
-                start: 'top 70%',
-                end: 'bottom 30%',
-                toggleActions: 'play reverse play reverse',
-                onEnter: () => gsap.set('.apropos-text', { y: 60, opacity: 0 }),
-                onEnterBack: () => gsap.set('.apropos-text', { y: 60, opacity: 0 })
-            },
-            duration: 1,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out'
-        });
+        gsap.fromTo('.apropos-text',
+            { y: 60, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.section-apropos',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 1,
+                y: 0,
+                opacity: 1,
+                ease: 'power3.out'
+            }
+        );
         
-        gsap.to('.stat-card', {
-            scrollTrigger: {
-                trigger: '.stats-grid',
-                start: 'top 80%',
-                end: 'bottom 30%',
-                toggleActions: 'play reverse play reverse',
-                onEnter: () => gsap.set('.stat-card', { y: 40, opacity: 0 }),
-                onEnterBack: () => gsap.set('.stat-card', { y: 40, opacity: 0 })
-            },
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            ease: 'power3.out'
-        });
+        gsap.fromTo('.stat-card',
+            { y: 40, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.stats-grid',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 0.8,
+                y: 0,
+                opacity: 1,
+                stagger: 0.15,
+                ease: 'power3.out'
+            }
+        );
         
         // Compétences 3D
-        gsap.to('.carousel-3d', {
-            scrollTrigger: {
-                trigger: '.section-competences',
-                start: 'top 70%',
-                end: 'bottom 30%',
-                toggleActions: 'play reverse play reverse',
-                onEnter: () => gsap.set('.carousel-3d', { scale: 0.8, opacity: 0 }),
-                onEnterBack: () => gsap.set('.carousel-3d', { scale: 0.8, opacity: 0 })
-            },
-            duration: 1.2,
-            scale: 1,
-            opacity: 1,
-            ease: 'power3.out'
-        });
+        gsap.fromTo('.carousel-3d',
+            { scale: 0.8, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.section-competences',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 1.2,
+                scale: 1,
+                opacity: 1,
+                ease: 'power3.out'
+            }
+        );
         
         // Expériences
-        gsap.to('.experience-card', {
-            scrollTrigger: {
-                trigger: '.section-experiences',
-                start: 'top 70%',
-                end: 'bottom 30%',
-                toggleActions: 'play reverse play reverse',
-                onEnter: () => gsap.set('.experience-card', { x: -50, opacity: 0 }),
-                onEnterBack: () => gsap.set('.experience-card', { x: -50, opacity: 0 })
-            },
-            duration: 0.8,
-            x: 0,
-            opacity: 1,
-            stagger: 0.15,
-            ease: 'power3.out'
-        });
+        gsap.fromTo('.experience-card',
+            { x: -50, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.section-experiences',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 0.8,
+                x: 0,
+                opacity: 1,
+                stagger: 0.15,
+                ease: 'power3.out'
+            }
+        );
         
-        // Formations - Animation indépendante (nouvelles cartes style Sabani)
+        // Formations - Animation indépendante
         const formationsSection = document.querySelector('#formations');
         if (formationsSection) {
             const formationsCards = formationsSection.querySelectorAll('.formation-item');
-            gsap.to(formationsCards, {
-                scrollTrigger: {
-                    trigger: '#formations',
-                    start: 'top 70%',
-                    end: 'bottom 30%',
-                    toggleActions: 'play reverse play reverse',
-                    onEnter: () => gsap.set(formationsCards, { y: 60, opacity: 0 }),
-                    onEnterBack: () => gsap.set(formationsCards, { y: 60, opacity: 0 })
-                },
-                duration: 0.8,
-                y: 0,
-                opacity: 1,
-                stagger: 0.15,
-                ease: 'power3.out'
-            });
+            if (formationsCards.length > 0) {
+                gsap.fromTo(formationsCards,
+                    { y: 60, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: '#formations',
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        },
+                        duration: 0.8,
+                        y: 0,
+                        opacity: 1,
+                        stagger: 0.15,
+                        ease: 'power3.out'
+                    }
+                );
+            }
         }
         
-        // Formations Autres - Animation indépendante (nouvelles cartes style Sabani)
+        // Formations Autres - Animation indépendante
         const formationsAutresSection = document.querySelector('#formations-autres');
         if (formationsAutresSection) {
             const formationsAutresCards = formationsAutresSection.querySelectorAll('.formation-item');
-            gsap.to(formationsAutresCards, {
-                scrollTrigger: {
-                    trigger: '#formations-autres',
-                    start: 'top 70%',
-                    end: 'bottom 30%',
-                    toggleActions: 'play reverse play reverse',
-                    onEnter: () => gsap.set(formationsAutresCards, { y: 60, opacity: 0 }),
-                    onEnterBack: () => gsap.set(formationsAutresCards, { y: 60, opacity: 0 })
-                },
-                duration: 0.8,
-                y: 0,
-                opacity: 1,
-                stagger: 0.15,
-                ease: 'power3.out'
-            });
+            if (formationsAutresCards.length > 0) {
+                gsap.fromTo(formationsAutresCards,
+                    { y: 60, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: '#formations-autres',
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        },
+                        duration: 0.8,
+                        y: 0,
+                        opacity: 1,
+                        stagger: 0.15,
+                        ease: 'power3.out'
+                    }
+                );
+            }
         }
         
-        // Passions - Animation indépendante
+        // Passions - Animation indépendante (vérifie les deux types de cartes)
         const passionsSection = document.querySelector('#passions');
         if (passionsSection) {
-            const passionsCards = passionsSection.querySelectorAll('.passion-card');
-            gsap.to(passionsCards, {
-                scrollTrigger: {
-                    trigger: '#passions',
-                    start: 'top 70%',
-                    end: 'bottom 30%',
-                    toggleActions: 'play reverse play reverse',
-                    onEnter: () => gsap.set(passionsCards, { scale: 0.8, opacity: 0 }),
-                    onEnterBack: () => gsap.set(passionsCards, { scale: 0.8, opacity: 0 })
-                },
-                duration: 0.8,
-                scale: 1,
-                opacity: 1,
-                stagger: 0.1,
-                ease: 'back.out(1.7)'
-            });
+            // Cherche d'abord les nouvelles cartes visuelles
+            let passionsCards = passionsSection.querySelectorAll('.passion-visual-card');
+            
+            // Si pas de cartes visuelles, cherche les anciennes cartes
+            if (passionsCards.length === 0) {
+                passionsCards = passionsSection.querySelectorAll('.passion-card');
+            }
+            
+            if (passionsCards.length > 0) {
+                console.log('✅ Passions trouvées:', passionsCards.length, 'cartes');
+                gsap.fromTo(passionsCards,
+                    { y: 60, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: '#passions',
+                            start: 'top 70%',
+                            toggleActions: 'play none none reverse'
+                        },
+                        duration: 0.8,
+                        y: 0,
+                        opacity: 1,
+                        stagger: 0.15,
+                        ease: 'power3.out'
+                    }
+                );
+            } else {
+                console.error('❌ Aucune carte passion trouvée');
+            }
+        } else {
+            console.error('❌ Section #passions non trouvée');
         }
         
         // Contact
-        gsap.to('.contact-text', {
-            scrollTrigger: {
-                trigger: '.section-contact',
-                start: 'top 70%',
-                end: 'bottom 30%',
-                toggleActions: 'play reverse play reverse',
-                onEnter: () => gsap.set('.contact-text', { y: 50, opacity: 0 }),
-                onEnterBack: () => gsap.set('.contact-text', { y: 50, opacity: 0 })
-            },
-            duration: 1,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out'
-        });
+        gsap.fromTo('.contact-text',
+            { y: 50, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.section-contact',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 1,
+                y: 0,
+                opacity: 1,
+                ease: 'power3.out'
+            }
+        );
         
-        gsap.to('.contact-btn', {
-            scrollTrigger: {
-                trigger: '.contact-links',
-                start: 'top 80%',
-                end: 'bottom 30%',
-                toggleActions: 'play reverse play reverse',
-                onEnter: () => gsap.set('.contact-btn', { y: 30, opacity: 0 }),
-                onEnterBack: () => gsap.set('.contact-btn', { y: 30, opacity: 0 })
-            },
-            duration: 0.6,
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            ease: 'back.out(1.7)'
-        });
+        gsap.fromTo('.contact-btn',
+            { y: 30, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.contact-links',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 0.6,
+                y: 0,
+                opacity: 1,
+                stagger: 0.1,
+                ease: 'back.out(1.7)'
+            }
+        );
         
         console.log('✨ Toutes les animations GSAP sont configurées');
     }
