@@ -1,5 +1,5 @@
 // ============================================
-// CAROUSEL 3D SEKAI STYLE - VERSION AMÉLIORÉE
+// CAROUSEL 3D SEKAI STYLE - VERSION OPTIMISÉE
 // ============================================
 
 class SekaiCarousel3D {
@@ -41,7 +41,7 @@ class SekaiCarousel3D {
     addDragIndicator() {
         const indicator = document.createElement('div');
         indicator.className = 'rotation-indicator';
-        indicator.textContent = 'Maintenez et glissez pour tourner (horizontal et vertical)';
+        indicator.textContent = 'Glissez pour explorer';
         this.carousel.appendChild(indicator);
     }
     
@@ -190,9 +190,9 @@ class SekaiCarousel3D {
 }
 
 // ============================================
-// CAROUSEL EXPÉRIENCES (Simple)
+// CAROUSEL EXPÉRIENCES - VERSION OPTIMISÉE AVEC TRANSITIONS FLUIDES
 // ============================================
-class SimpleCarousel {
+class ExperienceCarousel {
     constructor() {
         this.track = document.querySelector('.carousel-track');
         this.items = document.querySelectorAll('.carousel-item-exp');
@@ -203,6 +203,9 @@ class SimpleCarousel {
         
         this.currentIndex = 0;
         this.totalPages = this.items.length;
+        this.isTransitioning = false;
+        this.touchStartX = 0;
+        this.touchEndX = 0;
         
         if (this.track && this.items.length > 0) {
             this.init();
@@ -210,9 +213,12 @@ class SimpleCarousel {
     }
     
     init() {
+        console.log('✅ Carousel expériences initialisé');
         this.createDots();
         this.updateCarousel();
         this.attachEvents();
+        this.setupSwipeGestures();
+        this.setupKeyboardNavigation();
     }
     
     createDots() {
@@ -223,33 +229,64 @@ class SimpleCarousel {
             dot.classList.add('dot');
             if (i === 0) dot.classList.add('active');
             dot.addEventListener('click', () => this.goToPage(i));
+            dot.setAttribute('aria-label', `Page ${i + 1}`);
             this.dotsContainer.appendChild(dot);
         }
     }
     
     updateCarousel() {
+        if (this.isTransitioning) return;
+        
         const offset = -this.currentIndex * 100;
         this.track.style.transform = `translateX(${offset}%)`;
         
+        // Mettre à jour les boutons
         if (this.prevBtn) this.prevBtn.disabled = this.currentIndex === 0;
         if (this.nextBtn) this.nextBtn.disabled = this.currentIndex === this.totalPages - 1;
         
+        // Mettre à jour l'indicateur de page
         if (this.pageInfo) {
             this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
         }
         
+        // Mettre à jour les dots
         if (this.dotsContainer) {
             const dots = this.dotsContainer.querySelectorAll('.dot');
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === this.currentIndex);
             });
         }
+        
+        // Animer les cartes de la page actuelle
+        this.animateCurrentPageCards();
+    }
+    
+    animateCurrentPageCards() {
+        const currentPage = this.items[this.currentIndex];
+        if (!currentPage) return;
+        
+        const cards = currentPage.querySelectorAll('.experience-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 + (index * 150));
+        });
     }
     
     goToPage(index) {
-        if (index >= 0 && index < this.totalPages) {
+        if (index >= 0 && index < this.totalPages && !this.isTransitioning) {
+            this.isTransitioning = true;
             this.currentIndex = index;
             this.updateCarousel();
+            
+            setTimeout(() => {
+                this.isTransitioning = false;
+            }, 600);
         }
     }
     
@@ -259,6 +296,42 @@ class SimpleCarousel {
     
     next() {
         this.goToPage(this.currentIndex + 1);
+    }
+    
+    setupSwipeGestures() {
+        this.track.addEventListener('touchstart', (e) => {
+            this.touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        this.track.addEventListener('touchend', (e) => {
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+        });
+    }
+    
+    handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = this.touchStartX - this.touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next
+                this.next();
+            } else {
+                // Swipe right - prev
+                this.prev();
+            }
+        }
+    }
+    
+    setupKeyboardNavigation() {
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                this.prev();
+            } else if (e.key === 'ArrowRight') {
+                this.next();
+            }
+        });
     }
     
     attachEvents() {
@@ -271,6 +344,7 @@ class SimpleCarousel {
 // INITIALISATION PRINCIPALE
 // ============================================
 let sekaiCarousel = null;
+let experienceCarousel = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📄 DOM chargé');
@@ -294,7 +368,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     transitionInitial.remove();
                 }
                 
-                // ✅ DÉMARRER LES ANIMATIONS GSAP APRÈS LA FERMETURE DU RIDEAU
                 initGSAPAnimations();
                 
             }, 1200);
@@ -313,16 +386,15 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ GSAP chargé - Initialisation des animations');
         gsap.registerPlugin(ScrollTrigger);
         
-        // Rafraîchir ScrollTrigger après un court délai
         setTimeout(() => {
             ScrollTrigger.refresh();
         }, 100);
         
-        // Hero - Animations directes (pas de ScrollTrigger)
+        // Hero - Animations avec délais optimisés
         gsap.fromTo('.hero-title', 
             { y: 80, opacity: 0 },
             { 
-                duration: 1,
+                duration: 1.2,
                 y: 0,
                 opacity: 1,
                 ease: 'power4.out',
@@ -333,22 +405,22 @@ document.addEventListener('DOMContentLoaded', function() {
         gsap.fromTo('.hero-subtitle',
             { y: 30, opacity: 0 },
             {
-                duration: 0.8,
+                duration: 1,
                 y: 0,
                 opacity: 1,
                 ease: 'power3.out',
-                delay: 0.5
+                delay: 0.6
             }
         );
         
-        gsap.fromTo('.cta-button',
+        gsap.fromTo('.hero-buttons',
             { y: 20, opacity: 0 },
             {
                 duration: 0.8,
                 y: 0,
                 opacity: 1,
                 ease: 'back.out(1.7)',
-                delay: 0.8
+                delay: 1
             }
         );
         
@@ -400,9 +472,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         );
         
-        // Expériences
-        gsap.fromTo('.experience-card',
-            { x: -50, opacity: 0 },
+        // Expériences - Animation optimisée
+        gsap.fromTo('.section-header',
+            { y: 30, opacity: 0 },
             {
                 scrollTrigger: {
                     trigger: '.section-experiences',
@@ -410,14 +482,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     toggleActions: 'play none none reverse'
                 },
                 duration: 0.8,
-                x: 0,
+                y: 0,
                 opacity: 1,
-                stagger: 0.15,
                 ease: 'power3.out'
             }
         );
         
-        // Formations - Animation indépendante
+        // Frameworks
+        gsap.fromTo('.frameworks-track',
+            { opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.section-frameworks',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 1,
+                opacity: 1,
+                ease: 'power3.out'
+            }
+        );
+        
+        // Formations
         const formationsSection = document.querySelector('#formations');
         if (formationsSection) {
             const formationsCards = formationsSection.querySelectorAll('.formation-item');
@@ -440,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Formations Autres - Animation indépendante
+        // Formations Autres
         const formationsAutresSection = document.querySelector('#formations-autres');
         if (formationsAutresSection) {
             const formationsAutresCards = formationsAutresSection.querySelectorAll('.formation-item');
@@ -463,19 +549,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Passions - Animation indépendante (vérifie les deux types de cartes)
+        // Passions
         const passionsSection = document.querySelector('#passions');
         if (passionsSection) {
-            // Cherche d'abord les nouvelles cartes visuelles
             let passionsCards = passionsSection.querySelectorAll('.passion-visual-card');
             
-            // Si pas de cartes visuelles, cherche les anciennes cartes
             if (passionsCards.length === 0) {
                 passionsCards = passionsSection.querySelectorAll('.passion-card');
             }
             
             if (passionsCards.length > 0) {
-                console.log('✅ Passions trouvées:', passionsCards.length, 'cartes');
                 gsap.fromTo(passionsCards,
                     { y: 60, opacity: 0 },
                     {
@@ -491,11 +574,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         ease: 'power3.out'
                     }
                 );
-            } else {
-                console.error('❌ Aucune carte passion trouvée');
             }
-        } else {
-            console.error('❌ Section #passions non trouvée');
         }
         
         // Contact
@@ -514,19 +593,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         );
         
-        gsap.fromTo('.contact-btn',
+        gsap.fromTo('.contact-content',
             { y: 30, opacity: 0 },
             {
                 scrollTrigger: {
-                    trigger: '.contact-links',
+                    trigger: '.contact-content',
                     start: 'top 80%',
                     toggleActions: 'play none none reverse'
                 },
-                duration: 0.6,
+                duration: 0.8,
                 y: 0,
                 opacity: 1,
-                stagger: 0.1,
-                ease: 'back.out(1.7)'
+                ease: 'power3.out'
             }
         );
         
@@ -570,9 +648,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // INITIALISATION CAROUSELS
     // ============================================
     setTimeout(() => {
-        // Carousel expériences
+        // Carousel expériences - NOUVELLE VERSION
         if (document.querySelector('.carousel-track')) {
-            new SimpleCarousel();
+            experienceCarousel = new ExperienceCarousel();
             console.log('✅ Carousel expériences initialisé');
         }
         
@@ -581,8 +659,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (carouselElement) {
             sekaiCarousel = new SekaiCarousel3D();
             console.log('✅ Carousel 3D Sekai initialisé');
-        } else {
-            console.error('❌ Element .carousel-3d non trouvé !');
         }
         
     }, 100);
@@ -627,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cursor.style.top = e.clientY - 20 + 'px';
         });
         
-        const clickables = document.querySelectorAll('a, button, .skill-card, .passion-card, .carousel-control');
+        const clickables = document.querySelectorAll('a, button, .skill-card, .passion-visual-card, .carousel-control, .experience-card');
         clickables.forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursor.style.transform = 'scale(1.5)';
@@ -641,6 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     // DEBUG
     // ============================================
-    console.log('✨ Portfolio Owen Le Nadant - Style Sekai One');
+    console.log('✨ Portfolio Owen Le Nadant - Version Optimisée');
     console.log('🎪 Carousel 3D:', sekaiCarousel ? 'ACTIF ✅' : 'INACTIF ❌');
+    console.log('💼 Carousel Expériences:', experienceCarousel ? 'ACTIF ✅' : 'INACTIF ❌');
 });
