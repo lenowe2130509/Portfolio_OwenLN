@@ -48,3 +48,65 @@
     --carousel-item-height: 18rem;
     --carousel-diameter: 50rem;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: var(--couleur-fond);
+    color: var(--couleur-texte);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-size: 16px;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 3rem;
+    width: 100%;
+}
+
+.section-title {
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--couleur-texte-dim);
+    margin-bottom: var(--espacement-xl);
+    font-weight: 600;
+    position: relative;
+    padding-left: 3rem;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2px;
+    background: white;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section-title:hover::before {
+    width: 2.5rem;
+}

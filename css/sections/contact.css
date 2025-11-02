@@ -52,7 +52,7 @@
     transform: translateX(10px);
 }
 
-/* Icônes avec emojis */
+/* Icônes avec emojis - CORRECTION ICI */
 .btn-icon {
     flex-shrink: 0;
     width: 50px;
@@ -62,12 +62,11 @@
     justify-content: center;
     border: 1px solid var(--couleur-border);
     transition: all var(--transition-base);
-    font-size: 1.5rem;
+    font-size: 1.8rem; /* Taille des emojis */
 }
 
 .contact-btn:hover .btn-icon {
     background: white;
-    color: var(--couleur-fond);
     border-color: white;
     transform: scale(1.1);
 }
@@ -190,8 +189,77 @@
 
 .form-submit span:last-child {
     transition: transform var(--transition-base);
+    font-size: 1.2rem;
 }
 
 .form-submit:hover span:last-child {
     transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-contact {
+        padding: 4rem 0;
+        min-height: 50vh;
+    }
+    
+    .contact-text {
+        font-size: var(--text-xl);
+        margin-bottom: 2rem;
+    }
+    
+    .contact-links {
+        gap: 1rem;
+    }
+    
+    .contact-btn {
+        padding: 1rem 1.5rem;
+        font-size: 0.75rem;
+        gap: 0.75rem;
+    }
+    
+    .btn-icon {
+        font-size: 1.5rem;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .contact-form-wrapper {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-contact {
+        padding: 3rem 0;
+    }
+    
+    .contact-text {
+        font-size: var(--text-lg);
+    }
+    
+    .contact-btn {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.7rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .btn-icon {
+        font-size: 1.8rem;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .contact-form-wrapper {
+        padding: 1.5rem;
+    }
 }
