@@ -85,3 +85,16 @@ textarea:focus-visible {
 a, button, input, textarea {
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* Empêche le débordement de texte */
+* {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Titres responsifs */
+h1, h2, h3, h4, h5, h6 {
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+

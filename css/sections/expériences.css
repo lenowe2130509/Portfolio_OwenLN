@@ -97,8 +97,9 @@
 /* Liste des expériences */
 .experience-list {
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap; /* permet aux cards de passer à la ligne si nécessaire */
+  flex-direction: column;
+  gap: 1rem;
+  /*flex-wrap: wrap; /* permet aux cards de passer à la ligne si nécessaire */
 }
 
 
@@ -289,4 +290,28 @@
     width: 30px;
     border-color: white;
     animation: pulse 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+    .carousel-container {
+        overflow: hidden;
+        width: 100%;
+    }
+    
+    .carousel-track {
+        display: flex;
+        transition: transform 0.6s ease;
+    }
+    
+    .carousel-item-exp {
+        flex: 0 0 100%;
+        width: 100%;
+        padding: 0 1rem;
+    }
+    
+    .experience-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 }

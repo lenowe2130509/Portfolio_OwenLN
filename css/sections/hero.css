@@ -148,32 +148,19 @@
 
 @media (max-width: 768px) {
     .hero {
-        min-height: 80vh;
-        padding: 4rem 1.5rem;
+        background-position: center center;
+        background-size: cover;
+        min-height: 100vh;
     }
     
-    .hero-content {
-        padding: 0 1.5rem;
-        gap: 1.5rem;
+    .hero::before {
+        background: rgba(0,0,0,0.6); /* Plus sombre en mobile */
     }
-    
-    .hero-title {
-        font-size: clamp(1.75rem, 10vw, 4rem);
-        line-height: 1;
-    }
-    
-    .hero-subtitle {
-        font-size: clamp(0.875rem, 3vw, 1rem);
-        padding: 0.5rem 0.75rem;
-    }
-    
-    .cta-button {
-        padding: 1rem 2rem;
-        font-size: clamp(0.7rem, 2vw, 0.75rem);
-    }
-    
-    .hero::after {
-        height: 150px;
+}
+
+@media (max-width: 480px) {
+    .hero {
+        background-position: 60% center; /* Ajuste selon ta photo */
     }
 }
 

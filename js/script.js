@@ -815,3 +815,10 @@ window.addEventListener('load', () => {
 });
 
 console.log('✨ Script principal chargé');
+
+// Dans js/script.js - Ajoute ce debug
+console.log('🍔 État du menu:', {
+    toggle: !!document.getElementById('navToggle'),
+    menu: !!document.getElementById('navMenu'),
+    overlay: !!document.getElementById('navOverlay')
+});
