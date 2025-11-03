@@ -776,3 +776,23 @@ window.addEventListener('load', () => {
 });
 
 console.log('✨ Script principal chargé');
+
+// Projets
+const projetsCards = document.querySelectorAll('.projet-card');
+if (projetsCards.length > 0) {
+    gsap.fromTo(projetsCards,
+        { y: 60, opacity: 0 },
+        {
+            scrollTrigger: {
+                trigger: '.section-projets',
+                start: 'top 70%',
+                toggleActions: 'play none none reverse'
+            },
+            duration: 0.8,
+            y: 0,
+            opacity: 1,
+            stagger: 0.15,
+            ease: 'power3.out'
+        }
+    );
+}

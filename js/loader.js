@@ -11,6 +11,7 @@ class SectionLoader {
             { id: 'competences', file: 'sections/competences.html' },
             { id: 'frameworks', file: 'sections/frameworks.html' },
             { id: 'experiences', file: 'sections/experiences.html' },
+            { id: 'projets', file: 'sections/projets.html' },
             { id: 'formations', file: 'sections/formations.html' },
             { id: 'formations-autres', file: 'sections/formations-autres.html' },
             { id: 'passions', file: 'sections/passions.html' },
