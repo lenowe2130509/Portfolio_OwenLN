@@ -101,8 +101,8 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 280px;
-    height: 360px;
+    width: 300px;
+    height: 380px;
     margin-left: -140px;
     margin-top: -180px;
     transform-style: preserve-3d;
@@ -265,7 +265,7 @@
 /* Instructions */
 .carousel-instructions {
     text-align: center;
-    margin-top: 3rem;
+    margin-top: 8rem;
     color: #8a8a8a;
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -326,7 +326,7 @@
     }
     
     .skill-icon {
-        font-size: 3rem;
+        font-size: 2rem;
     }
     
     .skill-title {

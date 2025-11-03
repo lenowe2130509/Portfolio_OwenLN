@@ -75,6 +75,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
+    align-items: stretch; /* Force toutes les cards à avoir la même hauteur */
 }
 
 .stat-card {
@@ -84,6 +85,11 @@
     transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px; /* Hauteur minimale uniforme */
 }
 
 .stat-card::before {
