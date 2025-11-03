@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Menu Hamburger</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0f0f0f;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 15, 0.95);
+            padding: 1.5rem;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            z-index: 1002;
+        }
+        
+        /* HAMBURGER */
+        .nav-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1002;
+            position: relative;
+        }
+        
+        .hamburger-line {
+            width: 100%;
+            height: 3px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-toggle.active .hamburger-line:nth-child(1) {
+            transform: translateY(10px) rotate(45deg);
+        }
+        
+        .nav-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .nav-toggle.active .hamburger-line:nth-child(3) {
+            transform: translateY(-11px) rotate(-45deg);
+        }
+        
+        /* MENU */
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transition: right 0.4s ease;
+            z-index: 1001;
+            list-style: none;
+        }
+        
+        .nav-menu.active {
+            right: 0;
+        }
+        
+        .nav-menu li {
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 1rem 2rem;
+            display: block;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* OVERLAY */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 1000;
+        }
+        
+        .nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* CONTENU DE TEST */
+        .content {
+            padding: 100px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">TEST MENU</div>
+            
+            <button class="nav-toggle" id="navToggle">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#" class="nav-link">Accueil</a></li>
+                <li><a href="#" class="nav-link">À propos</a></li>
+                <li><a href="#" class="nav-link">Compétences</a></li>
+                <li><a href="#" class="nav-link">Expériences</a></li>
+                <li><a href="#" class="nav-link">Contact</a></li>
+            </ul>
+            
+            <div class="nav-overlay" id="navOverlay"></div>
+        </div>
+    </nav>
+    
+    <!-- CONTENU -->
+    <div class="content">
+        <h1>Test du Menu Hamburger</h1>
+        <p>Clique sur le hamburger en haut à droite.</p>
+        <p>Si le menu s'ouvre, le problème vient de ton CSS existant.</p>
+        <p>Si le menu ne s'ouvre pas, le problème vient du JavaScript.</p>
+        <p>Regarde la console (F12) pour les messages de debug.</p>
+    </div>
+    
+    <!-- JAVASCRIPT -->
+    <script>
+        console.log('🧪 Test menu démarré');
+        
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        console.log('Éléments:', {
+            navToggle: !!navToggle,
+            navMenu: !!navMenu,
+            navOverlay: !!navOverlay
+        });
+        
+        if (!navToggle || !navMenu || !navOverlay) {
+            console.error('❌ Éléments manquants!');
+        } else {
+            console.log('✅ Tous les éléments présents');
+            
+            navToggle.addEventListener('click', function() {
+                console.log('🖱️ CLIC détecté!');
+                
+                const isActive = navMenu.classList.contains('active');
+                console.log('État actuel:', isActive ? 'ouvert' : 'fermé');
+                
+                if (isActive) {
+                    navToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    console.log('📁 Menu fermé');
+                } else {
+                    navToggle.classList.add('active');
+                    navMenu.classList.add('active');
+                    navOverlay.classList.add('active');
+                    console.log('📂 Menu ouvert');
+                }
+            });
+            
+            navOverlay.addEventListener('click', function() {
+                console.log('🖱️ Clic sur overlay');
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                navOverlay.classList.remove('active');
+            });
+            
+            console.log('✅ Listeners ajoutés');
+        }
+    </script>
+</body>
+</html>

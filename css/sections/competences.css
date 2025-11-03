@@ -1,5 +1,5 @@
 /* ============================================
-   SECTION COMPÉTENCES - CARROUSEL 3D SEKAI STYLE
+   SECTION COMPÉTENCES - CARROUSEL 3D RESPONSIVE
    ============================================ */
 
 .section-competences {
@@ -202,7 +202,6 @@
 }
 
 .carousel-item.is-front .skill-title {
-    color: #ffffff;
     text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
 }
 
@@ -292,4 +291,294 @@
 
 .carousel-3d.dragging .rotation-indicator {
     opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE - DESKTOP
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .carousel-3d {
+        max-width: 900px;
+        height: 450px;
+    }
+    
+    .carousel-item {
+        --radius: 400px;
+        width: 240px;
+        height: 320px;
+        margin-left: -120px;
+        margin-top: -160px;
+    }
+    
+    .carousel-control {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .carousel-control.left {
+        left: -60px;
+    }
+    
+    .carousel-control.right {
+        right: -60px;
+    }
+    
+    .skill-icon {
+        font-size: 3rem;
+    }
+    
+    .skill-title {
+        font-size: 1.5rem;
+    }
+    
+    .skill-description {
+        font-size: 0.85rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .carousel-3d {
+        max-width: 800px;
+        height: 400px;
+    }
+    
+    .carousel-item {
+        --radius: 350px;
+        width: 220px;
+        height: 300px;
+        margin-left: -110px;
+        margin-top: -150px;
+    }
+    
+    .skill-card {
+        padding: 1.5rem 1rem;
+        gap: 1rem;
+    }
+    
+    .skill-icon {
+        font-size: 2.75rem;
+    }
+    
+    .skill-title {
+        font-size: 1.4rem;
+    }
+    
+    .skill-description {
+        font-size: 0.8rem;
+    }
+    
+    .skill-tag {
+        font-size: 0.65rem;
+        padding: 0.35rem 0.85rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .section-competences {
+        padding: 4rem 0;
+    }
+    
+    .carousel-3d {
+        max-width: 100%;
+        height: 380px;
+        margin: 2rem auto 0;
+    }
+    
+    .carousel-item {
+        --radius: 280px;
+        width: 180px;
+        height: 260px;
+        margin-left: -90px;
+        margin-top: -130px;
+    }
+    
+    .carousel-control {
+        width: 45px;
+        height: 45px;
+        font-size: 1.25rem;
+    }
+    
+    .carousel-control.left {
+        left: 10px;
+    }
+    
+    .carousel-control.right {
+        right: 10px;
+    }
+    
+    .skill-card {
+        padding: 1.25rem 1rem;
+        gap: 0.8rem;
+    }
+    
+    .skill-icon {
+        font-size: 2.5rem;
+    }
+    
+    .skill-title {
+        font-size: 1.2rem;
+    }
+    
+    .skill-description {
+        font-size: 0.75rem;
+        line-height: 1.5;
+    }
+    
+    .skill-tags {
+        gap: 0.4rem;
+    }
+    
+    .skill-tag {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.7rem;
+    }
+    
+    .carousel-instructions {
+        font-size: 0.75rem;
+        margin-top: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .carousel-ground {
+        width: 600px;
+        height: 600px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - PETIT MOBILE
+   ============================================ */
+
+@media (max-width: 480px) {
+    .carousel-3d {
+        height: 340px;
+    }
+    
+    .carousel-item {
+        --radius: 240px;
+        width: 160px;
+        height: 230px;
+        margin-left: -80px;
+        margin-top: -115px;
+    }
+    
+    .carousel-control {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+    }
+    
+    .carousel-control.left {
+        left: 5px;
+    }
+    
+    .carousel-control.right {
+        right: 5px;
+    }
+    
+    .skill-card {
+        padding: 1rem 0.75rem;
+        gap: 0.7rem;
+    }
+    
+    .skill-icon {
+        font-size: 2.25rem;
+    }
+    
+    .skill-title {
+        font-size: 1.1rem;
+    }
+    
+    .skill-description {
+        font-size: 0.7rem;
+    }
+    
+    .skill-tags {
+        gap: 0.35rem;
+    }
+    
+    .skill-tag {
+        font-size: 0.55rem;
+        padding: 0.25rem 0.6rem;
+    }
+    
+    .carousel-instructions {
+        font-size: 0.7rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - TRÈS PETIT MOBILE
+   ============================================ */
+
+@media (max-width: 360px) {
+    .carousel-3d {
+        height: 300px;
+    }
+    
+    .carousel-item {
+        --radius: 200px;
+        width: 140px;
+        height: 200px;
+        margin-left: -70px;
+        margin-top: -100px;
+    }
+    
+    .carousel-control {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .skill-card {
+        padding: 0.75rem 0.5rem;
+        gap: 0.5rem;
+    }
+    
+    .skill-icon {
+        font-size: 2rem;
+    }
+    
+    .skill-title {
+        font-size: 1rem;
+    }
+    
+    .skill-description {
+        font-size: 0.65rem;
+    }
+    
+    .skill-tag {
+        font-size: 0.5rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .carousel-ground {
+        width: 400px;
+        height: 400px;
+    }
+}
+
+/* ============================================
+   PRÉFÉRENCE ANIMATIONS RÉDUITES
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .carousel-3d,
+    .carousel-rotation,
+    .carousel-item,
+    .skill-card,
+    .carousel-control {
+        transition: none !important;
+        animation: none !important;
+    }
 }

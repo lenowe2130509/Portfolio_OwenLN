@@ -61,6 +61,7 @@
     padding: 0;
     z-index: 1002;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
 }
 
 .nav-toggle:hover {
@@ -73,6 +74,7 @@
     background: white;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     transform-origin: center;
+    display: block;
 }
 
 /* Animation du hamburger en X */
@@ -98,10 +100,13 @@
     gap: 2.5rem;
     list-style: none;
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-menu li {
     position: relative;
+    list-style: none;
 }
 
 .nav-link {
@@ -114,6 +119,7 @@
     padding: 0.5rem 0;
     color: white;
     display: block;
+    text-decoration: none;
 }
 
 .nav-link::after {
@@ -197,10 +203,12 @@
         align-items: flex-start;
         gap: 2rem;
         padding: 4rem 2rem;
+        margin: 0;
         transform: translateX(100%);
         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
         z-index: 1001;
+        list-style: none;
     }
     
     /* Menu ouvert */
@@ -208,11 +216,20 @@
         transform: translateX(0);
     }
     
+    /* Items du menu - TOUJOURS VISIBLES */
+    .nav-menu li {
+        width: 100%;
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+        list-style: none;
+    }
+    
     /* Liens du menu mobile */
     .nav-link {
         font-size: 1.25rem;
         padding: 0.75rem 0;
         width: 100%;
+        color: white;
     }
     
     .nav-link::after {
@@ -231,6 +248,7 @@
         padding: 1rem 1.5rem;
         border: 2px solid white;
         background: transparent;
+        color: white;
     }
     
     .nav-cv .nav-link:hover {
@@ -256,32 +274,6 @@
     .nav-overlay.active {
         opacity: 1;
         visibility: visible;
-    }
-    
-    /* Animation d'entrée des liens */
-    .nav-menu.active .nav-link {
-        animation: slideInFromRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        opacity: 0;
-    }
-    
-    .nav-menu.active li:nth-child(1) .nav-link { animation-delay: 0.1s; }
-    .nav-menu.active li:nth-child(2) .nav-link { animation-delay: 0.15s; }
-    .nav-menu.active li:nth-child(3) .nav-link { animation-delay: 0.2s; }
-    .nav-menu.active li:nth-child(4) .nav-link { animation-delay: 0.25s; }
-    .nav-menu.active li:nth-child(5) .nav-link { animation-delay: 0.3s; }
-    .nav-menu.active li:nth-child(6) .nav-link { animation-delay: 0.35s; }
-    .nav-menu.active li:nth-child(7) .nav-link { animation-delay: 0.4s; }
-    .nav-menu.active li:nth-child(8) .nav-link { animation-delay: 0.45s; }
-}
-
-@keyframes slideInFromRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
     }
 }
 
@@ -371,13 +363,13 @@ body.menu-open {
     .nav-toggle .hamburger-line,
     .nav-overlay,
     .nav-link {
-        transition: none;
-        animation: none;
+        transition: none !important;
+        animation: none !important;
     }
 }
 
 /* ============================================
-   AMÉLIORATION - INDICATEUR DE PAGE ACTIVE
+   INDICATEUR DE PAGE ACTIVE
    ============================================ */
 
 .nav-link.active {

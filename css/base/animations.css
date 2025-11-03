@@ -1,5 +1,5 @@
 /* ============================================
-   ANIMATIONS GLOBALES
+   ANIMATIONS GLOBALES - OPTIMISÉES
    ============================================ */
 
 /* Animation de rideau au chargement */
@@ -27,15 +27,26 @@
     right: 0;
 }
 
-/* Animations au chargement de la page */
-@keyframes slideInFromLeft {
-    from {
+/* Animations du Hero coordonnées avec le rideau */
+@keyframes titleReveal {
+    0% {
         opacity: 0;
-        transform: translateX(-50px);
+        transform: scale(0.8);
     }
-    to {
+    100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -64,31 +75,40 @@
     }
 }
 
-/* Préférence pour les animations réduites */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-    
-    .carousel-track,
-    .experience-card,
-    .carousel-btn,
-    .skill-badge,
-    .dot {
-        transition: none;
-        animation: none;
-    }
+/* ============================================
+   CLASSES D'ANIMATION
+   ============================================ */
+
+/* Animation des éléments Hero */
+.hero-title.animate-in {
+    animation: titleReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Visibilité initiale des éléments animés */
-.hero-title,
-.hero-subtitle,
-.cta-button,
+.hero-subtitle.animate-in {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.cta-button.animate-in {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* États initiaux des éléments animés */
+.hero-title:not(.animate-in) {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.hero-subtitle:not(.animate-in) {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.cta-button:not(.animate-in) {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Autres éléments animés par GSAP */
 .apropos-text,
 .stat-card,
 .carousel-3d,
@@ -99,9 +119,6 @@
     opacity: 0;
 }
 
-.hero-title.gsap-animated,
-.hero-subtitle.gsap-animated,
-.cta-button.gsap-animated,
 .apropos-text.gsap-animated,
 .stat-card.gsap-animated,
 .carousel-3d.gsap-animated,
@@ -110,4 +127,86 @@
 .contact-text.gsap-animated,
 .contact-btn.gsap-animated {
     opacity: 1;
+}
+
+/* ============================================
+   PRÉFÉRENCE ANIMATIONS RÉDUITES
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .curtain,
+    .hero-title,
+    .hero-subtitle,
+    .cta-button,
+    .carousel-track,
+    .experience-card,
+    .carousel-btn,
+    .skill-badge,
+    .dot {
+        transition: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ============================================
+   ANIMATIONS RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    @keyframes titleReveal {
+        0% {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    @keyframes titleReveal {
+        0% {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 }

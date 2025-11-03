@@ -1,5 +1,5 @@
 /* ============================================
-   SECTION HERO
+   SECTION HERO - VERSION RESPONSIVE COMPLÈTE
    ============================================ */
 
 .hero {
@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding: 6rem 0;
+    padding: 6rem 2rem;
     background-image: url('/images/moi.jpg');
     background-size: cover;
     background-position: center;
@@ -41,18 +41,20 @@
 }
 
 .hero-content {
+    position: relative;
+    z-index: 2;
     max-width: 1400px;
     width: 100%;
     padding: 0 3rem;
     text-align: center;
     display: flex;
-    flex-direction: column; /* <-- assure que les enfants s'empilent verticalement */
-    align-items: center;    /* centre horizontalement le texte */
-    gap: 1rem;              /* espace entre le titre, le sous-titre et le bouton */
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
 }
 
 .hero-title {
-    font-size: var(--text-hero);
+    font-size: clamp(2.5rem, 8vw, 8rem);
     font-weight: 900;
     line-height: 0.9;
     letter-spacing: -0.04em;
@@ -63,21 +65,24 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    /* Animation coordonnée avec le rideau */
+    opacity: 0;
+    transform: scale(0.8);
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
     color: #ffffff;
     text-shadow: 0 2px 6px rgba(0,0,0,0.6);
     background: rgba(0,0,0,0.2);
-    padding: 0.25rem 0.5rem;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     font-weight: 400;
     letter-spacing: 0.02em;
+    /* Animation après le titre */
+    opacity: 0;
+    transform: translateY(20px);
 }
-
-
-
 
 .cta-button {
     display: inline-block;
@@ -88,11 +93,14 @@
     border: 2px solid white;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    font-size: var(--text-sm);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
     transition: all var(--transition-base);
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    /* Animation après le sous-titre */
+    opacity: 0;
+    transform: translateY(20px);
 }
 
 .cta-button::before {
@@ -115,48 +123,165 @@
     color: var(--couleur-fond);
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE - TABLET
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .hero {
+        padding: 5rem 2rem;
+    }
+    
+    .hero-content {
+        padding: 0 2rem;
+        gap: 1.5rem;
+    }
+    
+    .hero-title {
+        font-size: clamp(2rem, 7vw, 6rem);
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE
+   ============================================ */
+
 @media (max-width: 768px) {
     .hero {
-        min-height: 70vh;
-        padding: 4rem 0;
+        min-height: 80vh;
+        padding: 4rem 1.5rem;
     }
     
     .hero-content {
         padding: 0 1.5rem;
+        gap: 1.5rem;
     }
     
     .hero-title {
-        font-size: clamp(2rem, 12vw, 5rem);
-        margin-bottom: 1.5rem;
+        font-size: clamp(1.75rem, 10vw, 4rem);
+        line-height: 1;
     }
     
     .hero-subtitle {
-        font-size: var(--text-base);
-        margin-bottom: 2rem;
+        font-size: clamp(0.875rem, 3vw, 1rem);
+        padding: 0.5rem 0.75rem;
     }
     
     .cta-button {
         padding: 1rem 2rem;
-        font-size: 0.75rem;
+        font-size: clamp(0.7rem, 2vw, 0.75rem);
+    }
+    
+    .hero::after {
+        height: 150px;
     }
 }
 
+/* ============================================
+   RESPONSIVE - PETIT MOBILE
+   ============================================ */
+
 @media (max-width: 480px) {
     .hero {
-        min-height: 60vh;
+        min-height: 70vh;
+        padding: 3rem 1rem;
     }
     
     .hero-content {
         padding: 0 1rem;
+        gap: 1rem;
+    }
+    
+    .hero-title {
+        font-size: clamp(1.5rem, 12vw, 3rem);
+        margin-bottom: 0.5rem;
     }
     
     .hero-subtitle {
-        font-size: 0.875rem;
+        font-size: clamp(0.75rem, 3.5vw, 0.875rem);
+        padding: 0.4rem 0.6rem;
     }
     
     .cta-button {
         padding: 0.875rem 1.75rem;
-        font-size: 0.7rem;
+        font-size: clamp(0.65rem, 2.5vw, 0.7rem);
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .hero::after {
+        height: 100px;
+    }
+}
+
+/* ============================================
+   TRÈS PETIT MOBILE
+   ============================================ */
+
+@media (max-width: 360px) {
+    .hero {
+        min-height: 65vh;
+    }
+    
+    .hero-title {
+        font-size: clamp(1.25rem, 14vw, 2.5rem);
+    }
+    
+    .hero-subtitle {
+        font-size: 0.75rem;
+    }
+    
+    .cta-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.65rem;
+    }
+}
+
+/* ============================================
+   ANIMATIONS - Classes ajoutées par JS
+   ============================================ */
+
+.hero-title.animate-in {
+    animation: titleReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-subtitle.animate-in {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+
+.cta-button.animate-in {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+}
+
+@keyframes titleReveal {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Préférence pour les animations réduites */
+@media (prefers-reduced-motion: reduce) {
+    .hero-title,
+    .hero-subtitle,
+    .cta-button {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
     }
 }

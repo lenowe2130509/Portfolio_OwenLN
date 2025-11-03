@@ -1,4 +1,8 @@
 // ============================================
+// PORTFOLIO OWEN LE NADANT - SCRIPT PRINCIPAL
+// ============================================
+
+// ============================================
 // CAROUSEL 3D SEKAI STYLE
 // ============================================
 
@@ -172,181 +176,305 @@ class SekaiCarousel3D {
 // ============================================
 
 class ExperienceCarousel {
-  constructor() {
-    this.track = document.querySelector('.carousel-track');
-    this.items = document.querySelectorAll('.carousel-item-exp');
-    this.prevBtn = document.getElementById('prevBtn');
-    this.nextBtn = document.getElementById('nextBtn');
-    this.pageInfo = document.getElementById('pageInfo');
-    this.dotsContainer = document.getElementById('carouselDots');
+    constructor() {
+        this.track = document.querySelector('.carousel-track');
+        this.items = document.querySelectorAll('.carousel-item-exp');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.pageInfo = document.getElementById('pageInfo');
+        this.dotsContainer = document.getElementById('carouselDots');
 
-    this.currentIndex = 0;
-    this.totalPages = this.items.length;
-    this.isTransitioning = false;
+        this.currentIndex = 0;
+        this.totalPages = this.items.length;
+        this.isTransitioning = false;
 
-    if (this.track && this.items.length > 0) {
-      this.init();
-    }
-  }
-
-  init() {
-    this.createDots();
-    this.updateCarousel();
-    this.attachEvents();
-    this.setupSwipeGestures();
-    this.setupKeyboardNavigation();
-  }
-
-  createDots() {
-    if (!this.dotsContainer) return;
-    this.dotsContainer.innerHTML = '';
-
-    for (let i = 0; i < this.totalPages; i++) {
-      const dot = document.createElement('div');
-      dot.classList.add('dot');
-      if (i === 0) dot.classList.add('active');
-      dot.addEventListener('click', () => this.goToPage(i));
-      this.dotsContainer.appendChild(dot);
-    }
-  }
-
-  updateCarousel() {
-    if (!this.track) return;
-
-    const offset = -this.currentIndex * 100;
-    this.track.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-    this.track.style.transform = `translateX(${offset}%)`;
-
-    if (this.pageInfo) {
-      this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
+        if (this.track && this.items.length > 0) {
+            this.init();
+        }
     }
 
-    if (this.dotsContainer) {
-      const dots = this.dotsContainer.querySelectorAll('.dot');
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === this.currentIndex);
-      });
+    init() {
+        console.log('💼 Carousel expériences initialisé avec', this.totalPages, 'pages');
+        this.createDots();
+        this.updateCarousel();
+        this.attachEvents();
+        this.setupSwipeGestures();
+        this.setupKeyboardNavigation();
     }
 
-    this.animateCurrentPageCards();
-  }
+    createDots() {
+        if (!this.dotsContainer) return;
+        this.dotsContainer.innerHTML = '';
 
-  animateCurrentPageCards() {
-    const currentPage = this.items[this.currentIndex];
-    if (!currentPage) return;
-
-    const cards = currentPage.querySelectorAll('.experience-card');
-    cards.forEach((card, index) => {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(30px)';
-      setTimeout(() => {
-        card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-      }, 100 + index * 150);
-    });
-  }
-
-  goToPage(index) {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-
-    // Bouclage fluide
-    if (index < 0) {
-      this.currentIndex = this.totalPages - 1;
-    } else if (index >= this.totalPages) {
-      this.currentIndex = 0;
-    } else {
-      this.currentIndex = index;
+        for (let i = 0; i < this.totalPages; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => this.goToPage(i));
+            this.dotsContainer.appendChild(dot);
+        }
     }
 
-    this.updateCarousel();
+    updateCarousel() {
+        if (!this.track) return;
 
-    setTimeout(() => {
-      this.isTransitioning = false;
-    }, 600);
-  }
+        const offset = -this.currentIndex * 100;
+        this.track.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+        this.track.style.transform = `translateX(${offset}%)`;
 
-  prev() {
-    this.goToPage(this.currentIndex - 1);
-  }
+        if (this.pageInfo) {
+            this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
+        }
 
-  next() {
-    this.goToPage(this.currentIndex + 1);
-  }
+        if (this.dotsContainer) {
+            const dots = this.dotsContainer.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === this.currentIndex);
+            });
+        }
 
-  attachEvents() {
-    if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prev());
-    if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.next());
-  }
+        this.animateCurrentPageCards();
+    }
 
-  setupSwipeGestures() {
-    let startX = 0;
-    this.track.addEventListener('touchstart', (e) => {
-      startX = e.changedTouches[0].screenX;
-    });
-    this.track.addEventListener('touchend', (e) => {
-      const endX = e.changedTouches[0].screenX;
-      const diff = startX - endX;
-      if (Math.abs(diff) > 50) {
-        diff > 0 ? this.next() : this.prev();
-      }
-    });
-  }
+    animateCurrentPageCards() {
+        const currentPage = this.items[this.currentIndex];
+        if (!currentPage) return;
 
-  setupKeyboardNavigation() {
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') this.prev();
-      if (e.key === 'ArrowRight') this.next();
-    });
-  }
+        const cards = currentPage.querySelectorAll('.experience-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 + index * 150);
+        });
+    }
+
+    goToPage(index) {
+        if (this.isTransitioning) return;
+        this.isTransitioning = true;
+
+        if (index < 0) {
+            this.currentIndex = this.totalPages - 1;
+        } else if (index >= this.totalPages) {
+            this.currentIndex = 0;
+        } else {
+            this.currentIndex = index;
+        }
+
+        this.updateCarousel();
+
+        setTimeout(() => {
+            this.isTransitioning = false;
+        }, 600);
+    }
+
+    prev() {
+        this.goToPage(this.currentIndex - 1);
+    }
+
+    next() {
+        this.goToPage(this.currentIndex + 1);
+    }
+
+    attachEvents() {
+        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prev());
+        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.next());
+    }
+
+    setupSwipeGestures() {
+        let startX = 0;
+        this.track.addEventListener('touchstart', (e) => {
+            startX = e.changedTouches[0].screenX;
+        });
+        this.track.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].screenX;
+            const diff = startX - endX;
+            if (Math.abs(diff) > 50) {
+                diff > 0 ? this.next() : this.prev();
+            }
+        });
+    }
+
+    setupKeyboardNavigation() {
+        document.addEventListener('keydown', (e) => {
+            const experiencesSection = document.querySelector('.section-experiences');
+            if (!experiencesSection) return;
+            const rect = experiencesSection.getBoundingClientRect();
+            const isInView = rect.top < window.innerHeight && rect.bottom >= 0;
+            if (isInView) {
+                if (e.key === 'ArrowLeft') this.prev();
+                if (e.key === 'ArrowRight') this.next();
+            }
+        });
+    }
 }
 
-// Initialisation après chargement du DOM
-document.addEventListener('DOMContentLoaded', () => {
-  new ExperienceCarousel();
-});
-
-
-
 // ============================================
-// VARIABLES GLOBALES
+// NAVIGATION MOBILE
 // ============================================
 
-let sekaiCarousel = null;
-let experienceCarousel = null;
-let curtainAnimationDone = false;
-
-// ============================================
-// FONCTION D'INITIALISATION PRINCIPALE
-// ============================================
-
-function initializePortfolio() {
-    console.log('📄 Initialisation du portfolio...');
+function initMobileNavigation() {
+    console.log('🍔 Initialisation du menu hamburger...');
     
-    // ============================================
-    // ANIMATION DU RIDEAU
-    // ============================================
+    // Attendre un peu pour être sûr que le DOM est prêt
+    setTimeout(() => {
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navOverlay = document.getElementById('navOverlay');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        console.log('🔍 navToggle:', navToggle);
+        console.log('🔍 navMenu:', navMenu);
+        console.log('🔍 navOverlay:', navOverlay);
+        console.log('🔍 navLinks:', navLinks.length);
+        
+        if (!navToggle || !navMenu || !navOverlay) {
+            console.error('❌ Éléments de navigation manquants');
+            console.error('navToggle:', !!navToggle);
+            console.error('navMenu:', !!navMenu);
+            console.error('navOverlay:', !!navOverlay);
+            return;
+        }
+        
+        console.log('✅ Éléments de navigation trouvés');
+        
+        function openMenu() {
+            console.log('📂 Ouverture du menu');
+            navToggle.classList.add('active');
+            navMenu.classList.add('active');
+            navOverlay.classList.add('active');
+            document.body.classList.add('menu-open');
+            
+            // Force l'affichage (au cas où)
+            navMenu.style.transform = 'translateX(0)';
+            navOverlay.style.opacity = '1';
+            navOverlay.style.visibility = 'visible';
+        }
+        
+        function closeMenu() {
+            console.log('📁 Fermeture du menu');
+            navToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            navOverlay.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            
+            // Reset les styles
+            navMenu.style.transform = 'translateX(100%)';
+            navOverlay.style.opacity = '0';
+            navOverlay.style.visibility = 'hidden';
+        }
+        
+        function toggleMenu(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            console.log('🖱️ Toggle menu - État actuel:', navMenu.classList.contains('active'));
+            
+            if (navMenu.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+        
+        // Event listener sur le bouton hamburger
+        navToggle.addEventListener('click', toggleMenu);
+        console.log('✅ Event listener ajouté sur navToggle');
+        
+        // Event listener sur l'overlay
+        navOverlay.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('🖱️ Clic sur overlay');
+            closeMenu();
+        });
+        console.log('✅ Event listener ajouté sur navOverlay');
+        
+        // Event listener sur les liens
+        navLinks.forEach((link, index) => {
+            link.addEventListener('click', () => {
+                console.log(`🖱️ Clic sur lien ${index + 1}`);
+                if (window.innerWidth <= 768) {
+                    closeMenu();
+                }
+            });
+        });
+        console.log('✅ Event listeners ajoutés sur', navLinks.length, 'liens');
+        
+        // Fermer avec Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                console.log('⌨️ Escape pressé');
+                closeMenu();
+            }
+        });
+        
+        console.log('✅ Menu hamburger complètement initialisé');
+        
+        // Test automatique après 1 seconde
+        setTimeout(() => {
+            console.log('🧪 Test automatique du menu...');
+            const rect = navToggle.getBoundingClientRect();
+            console.log('Position du bouton:', rect);
+            console.log('Largeur fenêtre:', window.innerWidth);
+        }, 1000);
+        
+    }, 100);
+}
+
+// ============================================
+// SCROLL NAVIGATION
+// ============================================
+
+function initScrollNavigation() {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar) return;
+    
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+}
+
+// ============================================
+// ANIMATION RIDEAU + HERO
+// ============================================
+
+function initCurtainAndHeroAnimation() {
     const transitionInitial = document.querySelector('.page-transition-initial');
     const curtainLeft = document.querySelector('.curtain-left');
     const curtainRight = document.querySelector('.curtain-right');
+    const heroTitle = document.querySelector('.hero-title');
+    const heroSubtitle = document.querySelector('.hero-subtitle');
+    const ctaButton = document.querySelector('.cta-button');
 
     setTimeout(() => {
         if (curtainLeft && curtainRight) {
             curtainLeft.style.transform = 'translateX(-100%)';
             curtainRight.style.transform = 'translateX(100%)';
+            
+            setTimeout(() => {
+                if (heroTitle) heroTitle.classList.add('animate-in');
+            }, 300);
+            
+            setTimeout(() => {
+                if (heroSubtitle) heroSubtitle.classList.add('animate-in');
+            }, 600);
+            
+            setTimeout(() => {
+                if (ctaButton) ctaButton.classList.add('animate-in');
+            }, 900);
         }
         
         setTimeout(() => {
-            if (transitionInitial) {
-                transitionInitial.remove();
-            }
-            
-            curtainAnimationDone = true;
-            document.body.classList.add('loaded');
-            
-            initGSAPAnimations();
-            
+            if (transitionInitial) transitionInitial.remove();
+            document.body.classList.add('curtain-animation-done');
         }, 1200);
     }, 300);
 }
@@ -368,49 +496,6 @@ function initGSAPAnimations() {
         ScrollTrigger.refresh();
     }, 100);
     
-    // Hero
-    gsap.fromTo('.hero-title', 
-        { y: 80, opacity: 0 },
-        { 
-            duration: 1.2,
-            y: 0,
-            opacity: 1,
-            ease: 'power4.out',
-            delay: 0.2,
-            onComplete: function() {
-                this.targets()[0].classList.add('gsap-animated');
-            }
-        }
-    );
-    
-    gsap.fromTo('.hero-subtitle',
-        { y: 30, opacity: 0 },
-        {
-            duration: 1,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out',
-            delay: 0.6,
-            onComplete: function() {
-                this.targets()[0].classList.add('gsap-animated');
-            }
-        }
-    );
-    
-    gsap.fromTo('.cta-button',
-        { y: 20, opacity: 0 },
-        {
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            ease: 'back.out(1.7)',
-            delay: 1,
-            onComplete: function() {
-                this.targets()[0].classList.add('gsap-animated');
-            }
-        }
-    );
-    
     // À propos
     gsap.fromTo('.apropos-text',
         { y: 60, opacity: 0 },
@@ -423,10 +508,7 @@ function initGSAPAnimations() {
             duration: 1,
             y: 0,
             opacity: 1,
-            ease: 'power3.out',
-            onComplete: function() {
-                this.targets()[0].classList.add('gsap-animated');
-            }
+            ease: 'power3.out'
         }
     );
     
@@ -442,12 +524,7 @@ function initGSAPAnimations() {
             y: 0,
             opacity: 1,
             stagger: 0.15,
-            ease: 'power3.out',
-            onComplete: function() {
-                gsap.utils.toArray('.stat-card').forEach(card => {
-                    card.classList.add('gsap-animated');
-                });
-            }
+            ease: 'power3.out'
         }
     );
     
@@ -463,10 +540,7 @@ function initGSAPAnimations() {
             duration: 1.2,
             scale: 1,
             opacity: 1,
-            ease: 'power3.out',
-            onComplete: function() {
-                this.targets()[0].classList.add('gsap-animated');
-            }
+            ease: 'power3.out'
         }
     );
     
@@ -501,6 +575,26 @@ function initGSAPAnimations() {
         }
     );
     
+    // Projets
+    const projetsCards = document.querySelectorAll('.projet-card');
+    if (projetsCards.length > 0) {
+        gsap.fromTo(projetsCards,
+            { y: 60, opacity: 0 },
+            {
+                scrollTrigger: {
+                    trigger: '.section-projets',
+                    start: 'top 70%',
+                    toggleActions: 'play none none reverse'
+                },
+                duration: 0.8,
+                y: 0,
+                opacity: 1,
+                stagger: 0.15,
+                ease: 'power3.out'
+            }
+        );
+    }
+    
     // Formations
     const formationsCards = document.querySelectorAll('.formation-item');
     if (formationsCards.length > 0) {
@@ -516,12 +610,7 @@ function initGSAPAnimations() {
                 y: 0,
                 opacity: 1,
                 stagger: 0.15,
-                ease: 'power3.out',
-                onComplete: function() {
-                    formationsCards.forEach(card => {
-                        card.classList.add('gsap-animated');
-                    });
-                }
+                ease: 'power3.out'
             }
         );
     }
@@ -541,12 +630,7 @@ function initGSAPAnimations() {
                 y: 0,
                 opacity: 1,
                 stagger: 0.15,
-                ease: 'power3.out',
-                onComplete: function() {
-                    passionsCards.forEach(card => {
-                        card.classList.add('gsap-animated');
-                    });
-                }
+                ease: 'power3.out'
             }
         );
     }
@@ -563,10 +647,7 @@ function initGSAPAnimations() {
             duration: 1,
             y: 0,
             opacity: 1,
-            ease: 'power3.out',
-            onComplete: function() {
-                this.targets()[0].classList.add('gsap-animated');
-            }
+            ease: 'power3.out'
         }
     );
     
@@ -582,131 +663,36 @@ function initGSAPAnimations() {
             y: 0,
             opacity: 1,
             stagger: 0.15,
-            ease: 'power3.out',
-            onComplete: function() {
-                gsap.utils.toArray('.contact-btn').forEach(btn => {
-                    btn.classList.add('gsap-animated');
-                });
-            }
+            ease: 'power3.out'
         }
     );
     
-    console.log('✨ Toutes les animations GSAP sont configurées');
+    console.log('✨ Animations GSAP configurées');
 }
-
-// ============================================
-// NAVIGATION
-// ============================================
-
-const navbar = document.querySelector('.navbar');
-if (navbar) {
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-}
-
-// Navigation Mobile
-const navToggle = document.getElementById('navToggle');
-const navMenu = document.getElementById('navMenu');
-const navOverlay = document.getElementById('navOverlay');
-const navLinks = document.querySelectorAll('.nav-link');
-
-if (navToggle && navMenu && navOverlay) {
-    navToggle.addEventListener('click', () => {
-        navToggle.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        navOverlay.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
-    });
-    
-    navOverlay.addEventListener('click', () => {
-        navToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-        navOverlay.classList.remove('active');
-        document.body.classList.remove('menu-open');
-    });
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                navToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-                navOverlay.classList.remove('active');
-                document.body.classList.remove('menu-open');
-            }
-        });
-    });
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-            navToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            navOverlay.classList.remove('active');
-            document.body.classList.remove('menu-open');
-        }
-    });
-}
-
-// Smooth Scroll
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        
-        if (target) {
-            const offsetTop = target.offsetTop - 80;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
 
 // ============================================
 // PARALLAXE HERO
 // ============================================
 
-const heroContent = document.querySelector('.hero-content');
-
-if (heroContent) {
-    // 1️⃣ apparition fluide au chargement
-    window.addEventListener('load', () => {
-        heroContent.style.opacity = 1;
-        heroContent.style.transform = 'translateY(0)';
-    });
-
-    // 2️⃣ parallax léger au scroll
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallax = scrolled * 0.3;
-        heroContent.style.transform = `translateY(${parallax}px)`;
-    });
+function initHeroParallax() {
+    const heroContent = document.querySelector('.hero-content');
+    
+    if (heroContent) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.3;
+            heroContent.style.transform = `translateY(${parallax}px)`;
+        });
+    }
 }
 
-const heroFade = document.querySelector('.hero-fade');
-const hero = document.querySelector('.hero');
-
-window.addEventListener('scroll', () => {
-    if (!heroFade || !hero) return;
-    const scrollTop = window.scrollY;
-    const heroHeight = hero.offsetHeight;
-
-    const opacity = Math.min(scrollTop / heroHeight, 1);
-    heroFade.style.opacity = opacity;
-});
-
-
-
 // ============================================
-// CURSEUR CUSTOM
+// CURSEUR CUSTOM (Desktop uniquement)
 // ============================================
 
-if (window.innerWidth > 768) {
+function initCustomCursor() {
+    if (window.innerWidth <= 768) return;
+    
     const cursor = document.createElement('div');
     cursor.style.cssText = `
         width: 40px;
@@ -740,59 +726,92 @@ if (window.innerWidth > 768) {
 }
 
 // ============================================
-// INITIALISATION CAROUSELS
+// INITIALISATION PRINCIPALE
 // ============================================
 
-setTimeout(() => {
-    if (document.querySelector('.carousel-track')) {
-        experienceCarousel = new ExperienceCarousel();
-        console.log('✅ Carousel expériences initialisé');
+let sekaiCarousel = null;
+let experienceCarousel = null;
+let navigationInitialized = false;
+
+// Fonction d'initialisation complète
+function initializeEverything() {
+    if (navigationInitialized) {
+        console.log('⚠️ Navigation déjà initialisée, skip');
+        return;
     }
     
-    if (document.querySelector('.carousel-3d')) {
-        sekaiCarousel = new SekaiCarousel3D();
-        console.log('✅ Carousel 3D Sekai initialisé');
+    console.log('🚀 Initialisation complète...');
+    
+    // Navigation (PRIORITÉ 1)
+    initMobileNavigation();
+    initScrollNavigation();
+    navigationInitialized = true;
+    
+    // Animation rideau + hero
+    if (!document.body.classList.contains('curtain-animation-done')) {
+        initCurtainAndHeroAnimation();
     }
-}, 100);
+    
+    // Animations GSAP
+    initGSAPAnimations();
+    
+    // Parallaxe Hero
+    initHeroParallax();
+    
+    // Curseur custom
+    initCustomCursor();
+    
+    // Carousels
+    if (document.querySelector('.carousel-track') && !experienceCarousel) {
+        experienceCarousel = new ExperienceCarousel();
+    }
+    
+    if (document.querySelector('.carousel-3d') && !sekaiCarousel) {
+        sekaiCarousel = new SekaiCarousel3D();
+    }
+    
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const offsetTop = target.offsetTop - 80;
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
 
-// ============================================
-// DÉMARRAGE
-// ============================================
-
+// Méthode 1 : sectionsLoaded
 document.addEventListener('sectionsLoaded', () => {
-    console.log('✨ Sections chargées - Initialisation du portfolio');
-    setTimeout(() => {
-        initializePortfolio();
-    }, 200);
+    console.log('✨ Event sectionsLoaded déclenché');
+    setTimeout(initializeEverything, 200);
 });
 
-window.addEventListener('load', () => {
+// Méthode 2 : DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('✨ DOMContentLoaded déclenché');
     setTimeout(() => {
-        if (!curtainAnimationDone) {
-            console.warn('⚠️ Initialisation de secours...');
-            initializePortfolio();
+        if (!navigationInitialized) {
+            console.log('⚠️ Navigation pas encore initialisée via sectionsLoaded');
+            initializeEverything();
         }
-    }, 2000);
+    }, 500);
+});
+
+// Méthode 3 : window.load (dernier recours)
+window.addEventListener('load', () => {
+    console.log('✨ window.load déclenché');
+    setTimeout(() => {
+        if (!navigationInitialized) {
+            console.log('⚠️ Fallback final - initialisation forcée');
+            initializeEverything();
+        }
+    }, 1000);
 });
 
 console.log('✨ Script principal chargé');
-
-// Projets
-const projetsCards = document.querySelectorAll('.projet-card');
-if (projetsCards.length > 0) {
-    gsap.fromTo(projetsCards,
-        { y: 60, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.section-projets',
-                start: 'top 70%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            ease: 'power3.out'
-        }
-    );
-}
