@@ -35,7 +35,7 @@ class SekaiCarousel3D {
     }
     
     init() {
-        console.log('🎪 Carousel Sekai initialisé avec', this.items.length, 'items');
+        //consol.log('🎪 Carousel Sekai initialisé avec', this.items.length, 'items');
         this.setupControls();
         this.setupDragInteraction();
         this.addDragIndicator();
@@ -194,7 +194,7 @@ class ExperienceCarousel {
     }
 
     init() {
-        console.log('💼 Carousel expériences initialisé avec', this.totalPages, 'pages');
+        //consol.log('💼 Carousel expériences initialisé avec', this.totalPages, 'pages');
         this.createDots();
         this.updateCarousel();
         this.attachEvents();
@@ -317,7 +317,7 @@ class ExperienceCarousel {
 // ============================================
 
 function initMobileNavigation() {
-    console.log('🍔 Initialisation du menu hamburger...');
+    //consol.log('🍔 Initialisation du menu hamburger...');
     
     // Attendre un peu pour être sûr que le DOM est prêt
     setTimeout(() => {
@@ -326,10 +326,10 @@ function initMobileNavigation() {
         const navOverlay = document.getElementById('navOverlay');
         const navLinks = document.querySelectorAll('.nav-link');
         
-        console.log('🔍 navToggle:', navToggle);
-        console.log('🔍 navMenu:', navMenu);
-        console.log('🔍 navOverlay:', navOverlay);
-        console.log('🔍 navLinks:', navLinks.length);
+        //consol.log('🔍 navToggle:', navToggle);
+        //consol.log('🔍 navMenu:', navMenu);
+        //consol.log('🔍 navOverlay:', navOverlay);
+        //consol.log('🔍 navLinks:', navLinks.length);
         
         if (!navToggle || !navMenu || !navOverlay) {
             console.error('❌ Éléments de navigation manquants');
@@ -339,10 +339,10 @@ function initMobileNavigation() {
             return;
         }
         
-        console.log('✅ Éléments de navigation trouvés');
+        //consol.log('✅ Éléments de navigation trouvés');
         
         function openMenu() {
-            console.log('📂 Ouverture du menu');
+            //consol.log('📂 Ouverture du menu');
             navToggle.classList.add('active');
             navMenu.classList.add('active');
             navOverlay.classList.add('active');
@@ -355,7 +355,7 @@ function initMobileNavigation() {
         }
         
         function closeMenu() {
-            console.log('📁 Fermeture du menu');
+            //consol.log('📁 Fermeture du menu');
             navToggle.classList.remove('active');
             navMenu.classList.remove('active');
             navOverlay.classList.remove('active');
@@ -372,7 +372,7 @@ function initMobileNavigation() {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            console.log('🖱️ Toggle menu - État actuel:', navMenu.classList.contains('active'));
+            //consol.log('🖱️ Toggle menu - État actuel:', navMenu.classList.contains('active'));
             
             if (navMenu.classList.contains('active')) {
                 closeMenu();
@@ -383,43 +383,43 @@ function initMobileNavigation() {
         
         // Event listener sur le bouton hamburger
         navToggle.addEventListener('click', toggleMenu);
-        console.log('✅ Event listener ajouté sur navToggle');
+        //consol.log('✅ Event listener ajouté sur navToggle');
         
         // Event listener sur l'overlay
         navOverlay.addEventListener('click', (e) => {
             e.preventDefault();
-            console.log('🖱️ Clic sur overlay');
+            //consol.log('🖱️ Clic sur overlay');
             closeMenu();
         });
-        console.log('✅ Event listener ajouté sur navOverlay');
+        //consol.log('✅ Event listener ajouté sur navOverlay');
         
         // Event listener sur les liens
         navLinks.forEach((link, index) => {
             link.addEventListener('click', () => {
-                console.log(`🖱️ Clic sur lien ${index + 1}`);
+                //consol.log(`🖱️ Clic sur lien ${index + 1}`);
                 if (window.innerWidth <= 768) {
                     closeMenu();
                 }
             });
         });
-        console.log('✅ Event listeners ajoutés sur', navLinks.length, 'liens');
+        //consol.log('✅ Event listeners ajoutés sur', navLinks.length, 'liens');
         
         // Fermer avec Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                console.log('⌨️ Escape pressé');
+                //consol.log('⌨️ Escape pressé');
                 closeMenu();
             }
         });
         
-        console.log('✅ Menu hamburger complètement initialisé');
+        //consol.log('✅ Menu hamburger complètement initialisé');
         
         // Test automatique après 1 seconde
         setTimeout(() => {
-            console.log('🧪 Test automatique du menu...');
+            //consol.log('🧪 Test automatique du menu...');
             const rect = navToggle.getBoundingClientRect();
-            console.log('Position du bouton:', rect);
-            console.log('Largeur fenêtre:', window.innerWidth);
+            //consol.log('Position du bouton:', rect);
+            //consol.log('Largeur fenêtre:', window.innerWidth);
         }, 1000);
         
     }, 100);
@@ -489,7 +489,7 @@ function initGSAPAnimations() {
         return;
     }
     
-    console.log('✅ GSAP chargé - Initialisation des animations');
+    //consol.log('✅ GSAP chargé - Initialisation des animations');
     gsap.registerPlugin(ScrollTrigger);
     
     setTimeout(() => {
@@ -667,7 +667,7 @@ function initGSAPAnimations() {
         }
     );
     
-    console.log('✨ Animations GSAP configurées');
+    ////consol.log('✨ Animations GSAP configurées');
 }
 
 // ============================================
@@ -686,14 +686,14 @@ function initHeroParallax() {
     }
 }
 
-// ============================================
-// CURSEUR CUSTOM (Desktop uniquement)
-// ============================================
+//============================================
+ //CURSEUR CUSTOM (Desktop uniquement)
+ //============================================
 
 function initCustomCursor() {
     if (window.innerWidth <= 768) return;
     
-    const cursor = document.createElement('div');
+    /*const cursor = document.createElement('div');
     cursor.style.cssText = `
         width: 40px;
         height: 40px;
@@ -706,7 +706,7 @@ function initCustomCursor() {
         transition: transform 0.2s ease;
         display: none;
     `;
-    document.body.appendChild(cursor);
+    document.body.appendChild(cursor);*/
     
     document.addEventListener('mousemove', (e) => {
         cursor.style.display = 'block';
@@ -723,7 +723,7 @@ function initCustomCursor() {
             cursor.style.transform = 'scale(1)';
         });
     });
-}
+} 
 
 // ============================================
 // INITIALISATION PRINCIPALE
@@ -736,11 +736,11 @@ let navigationInitialized = false;
 // Fonction d'initialisation complète
 function initializeEverything() {
     if (navigationInitialized) {
-        console.log('⚠️ Navigation déjà initialisée, skip');
+        //consol.log('⚠️ Navigation déjà initialisée, skip');
         return;
     }
     
-    console.log('🚀 Initialisation complète...');
+    //consol.log('🚀 Initialisation complète...');
     
     // Navigation (PRIORITÉ 1)
     initMobileNavigation();
@@ -788,16 +788,16 @@ function initializeEverything() {
 
 // Méthode 1 : sectionsLoaded
 document.addEventListener('sectionsLoaded', () => {
-    console.log('✨ Event sectionsLoaded déclenché');
+    //consol.log('✨ Event sectionsLoaded déclenché');
     setTimeout(initializeEverything, 200);
 });
 
 // Méthode 2 : DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✨ DOMContentLoaded déclenché');
+    //consol.log('✨ DOMContentLoaded déclenché');
     setTimeout(() => {
         if (!navigationInitialized) {
-            console.log('⚠️ Navigation pas encore initialisée via sectionsLoaded');
+            //consol.log('⚠️ Navigation pas encore initialisée via sectionsLoaded');
             initializeEverything();
         }
     }, 500);
@@ -805,20 +805,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Méthode 3 : window.load (dernier recours)
 window.addEventListener('load', () => {
-    console.log('✨ window.load déclenché');
+    //consol.log('✨ window.load déclenché');
     setTimeout(() => {
         if (!navigationInitialized) {
-            console.log('⚠️ Fallback final - initialisation forcée');
+            //consol.log('⚠️ Fallback final - initialisation forcée');
             initializeEverything();
         }
     }, 1000);
 });
 
-console.log('✨ Script principal chargé');
+//consol.log('✨ Script principal chargé');
 
 // Dans js/script.js - Ajoute ce debug
-console.log('🍔 État du menu:', {
+/*consol.log('🍔 État du menu:', {
     toggle: !!document.getElementById('navToggle'),
     menu: !!document.getElementById('navMenu'),
     overlay: !!document.getElementById('navOverlay')
-});
+});*/

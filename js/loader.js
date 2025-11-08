@@ -35,7 +35,7 @@ class SectionLoader {
             if (placeholder) {
                 placeholder.outerHTML = html;
                 this.loadedCount++;
-                console.log(`✅ Section ${section.id} chargée (${this.loadedCount}/${this.totalSections})`);
+                //consol.log(`✅ Section ${section.id} chargée (${this.loadedCount}/${this.totalSections})`);
             } else {
                 console.warn(`⚠️ Placeholder ${section.id}-placeholder non trouvé`);
             }
@@ -45,14 +45,14 @@ class SectionLoader {
     }
     
     async loadAll() {
-        console.log('🚀 Début du chargement des sections...');
+        //consol.log('🚀 Début du chargement des sections...');
         
         // Charger toutes les sections en parallèle
         await Promise.all(
             this.sections.map(section => this.loadSection(section))
         );
         
-        console.log(`✨ ${this.loadedCount}/${this.totalSections} sections chargées!`);
+        //consol.log(`✨ ${this.loadedCount}/${this.totalSections} sections chargées!`);
         
         // Déclencher un événement personnalisé
         document.dispatchEvent(new Event('sectionsLoaded'));

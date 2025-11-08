@@ -9,6 +9,9 @@
     "live-server": "^1.2.0"
   },
   "scripts": {
-    "start": "cross-env BROWSER=chrome live-server ./"
-  }
+  "start:chrome": "cross-env BROWSER='Google Chrome' live-server ./",
+  "start:safari": "cross-env BROWSER=safari live-server ./",
+  "start:firefox": "cross-env BROWSER=firefox live-server ./"
+}
+
 }
