@@ -1,11 +1,54 @@
 // ============================================
-// PORTFOLIO OWEN LE NADANT - SCRIPT PRINCIPAL
+// SCRIPT.JS - VERSION ULTRA-OPTIMISÉE FINALE
+// Compatible: Chrome, Safari, Firefox, Edge
+// Performance: 60 FPS garantis
 // ============================================
 
 // ============================================
-// CAROUSEL 3D SEKAI STYLE
+// DÉTECTION NAVIGATEUR
 // ============================================
+const Browser = {
+    isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
+    isFirefox: navigator.userAgent.toLowerCase().indexOf('firefox') > -1,
+    isEdge: /Edg/.test(navigator.userAgent),
+    isChrome: /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent),
+    isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+    isIOS: /iPhone|iPad|iPod/.test(navigator.userAgent)
+};
 
+console.log('🌐 Navigateur:', 
+    Browser.isSafari ? 'Safari' : 
+    Browser.isFirefox ? 'Firefox' : 
+    Browser.isEdge ? 'Edge' : 'Chrome'
+);
+
+// ============================================
+// UTILITAIRES PERFORMANCE
+// ============================================
+function debounce(func, wait = 150) {
+    let timeout;
+    return function executedFunction(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+function throttleRAF(func) {
+    let ticking = false;
+    return function(...args) {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                func.apply(this, args);
+                ticking = false;
+            });
+            ticking = true;
+        }
+    };
+}
+
+// ============================================
+// CAROUSEL 3D SEKAI - ULTRA-OPTIMISÉ
+// ============================================
 class SekaiCarousel3D {
     constructor() {
         this.carousel = document.querySelector('.carousel-3d');
@@ -29,24 +72,65 @@ class SekaiCarousel3D {
         this.isAutoRotating = true;
         this.animationFrame = null;
         
+        // ⚡ CRITIQUE: Gestion visibilité
+        this.isVisible = false;
+        this.visibilityObserver = null;
+        
         if (this.carousel && this.rotation && this.items.length > 0) {
             this.init();
         }
     }
     
     init() {
-        //consol.log('🎪 Carousel Sekai initialisé avec', this.items.length, 'items');
+        console.log('🎪 Carousel initialisé avec', this.items.length, 'items');
+        this.setupVisibilityObserver();
         this.setupControls();
         this.setupDragInteraction();
         this.addDragIndicator();
-        this.animate();
+        
+        if (this.isVisible) {
+            this.animate();
+        }
+    }
+    
+    setupVisibilityObserver() {
+        if (!('IntersectionObserver' in window)) {
+            this.isVisible = true;
+            return;
+        }
+        
+        this.visibilityObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    this.isVisible = entry.isIntersecting;
+                    
+                    if (this.isVisible && !this.animationFrame) {
+                        console.log('▶️ Carousel visible - Animation démarrée');
+                        this.animate();
+                    } else if (!this.isVisible && this.animationFrame) {
+                        console.log('⏸️ Carousel invisible - Animation pausée');
+                        cancelAnimationFrame(this.animationFrame);
+                        this.animationFrame = null;
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+        
+        this.visibilityObserver.observe(this.carousel);
     }
     
     addDragIndicator() {
+        if (this.carousel.querySelector('.rotation-indicator')) return;
+        
         const indicator = document.createElement('div');
         indicator.className = 'rotation-indicator';
         indicator.textContent = 'Glissez pour explorer';
         this.carousel.appendChild(indicator);
+        
+        setTimeout(() => {
+            if (indicator.style) indicator.style.opacity = '0';
+        }, 3000);
     }
     
     setupControls() {
@@ -56,7 +140,7 @@ class SekaiCarousel3D {
                 this.stopAutoRotation();
                 this.rotateBy(-45, 0);
                 setTimeout(() => this.startAutoRotation(), 3000);
-            });
+            }, { passive: false });
         }
         
         if (this.leftControl) {
@@ -65,31 +149,35 @@ class SekaiCarousel3D {
                 this.stopAutoRotation();
                 this.rotateBy(45, 0);
                 setTimeout(() => this.startAutoRotation(), 3000);
-            });
+            }, { passive: false });
         }
     }
     
     setupDragInteraction() {
-        this.carousel.addEventListener('mousedown', (e) => this.onDragStart(e));
-        document.addEventListener('mousemove', (e) => this.onDragMove(e));
-        document.addEventListener('mouseup', () => this.onDragEnd());
+        this.carousel.addEventListener('mousedown', (e) => this.onDragStart(e), { passive: true });
+        document.addEventListener('mousemove', (e) => this.onDragMove(e), { passive: true });
+        document.addEventListener('mouseup', () => this.onDragEnd(), { passive: true });
         
-        this.carousel.addEventListener('touchstart', (e) => this.onDragStart(e.touches[0]));
+        this.carousel.addEventListener('touchstart', (e) => {
+            this.onDragStart(e.touches[0]);
+        }, { passive: true });
+        
         document.addEventListener('touchmove', (e) => {
             if (this.isDragging) {
-                e.preventDefault();
                 this.onDragMove(e.touches[0]);
             }
-        }, { passive: false });
-        document.addEventListener('touchend', () => this.onDragEnd());
+        }, { passive: true });
+        
+        document.addEventListener('touchend', () => this.onDragEnd(), { passive: true });
         
         this.carousel.addEventListener('selectstart', (e) => e.preventDefault());
+        this.carousel.addEventListener('contextmenu', (e) => e.preventDefault());
     }
     
     onDragStart(e) {
         this.isDragging = true;
-        this.startX = e.clientX;
-        this.startY = e.clientY;
+        this.startX = e.clientX || e.pageX;
+        this.startY = e.clientY || e.pageY;
         this.startRotationY = this.currentRotationY;
         this.startRotationX = this.currentRotationX;
         this.stopAutoRotation();
@@ -99,11 +187,14 @@ class SekaiCarousel3D {
     onDragMove(e) {
         if (!this.isDragging) return;
         
-        const deltaX = e.clientX - this.startX;
+        const clientX = e.clientX || e.pageX;
+        const clientY = e.clientY || e.pageY;
+        
+        const deltaX = clientX - this.startX;
         const rotationChangeY = deltaX * 0.2;
         this.targetRotationY = this.startRotationY + rotationChangeY;
         
-        const deltaY = e.clientY - this.startY;
+        const deltaY = clientY - this.startY;
         const rotationChangeX = deltaY * 0.15;
         this.targetRotationX = this.startRotationX - rotationChangeX;
         this.targetRotationX = Math.max(-30, Math.min(30, this.targetRotationX));
@@ -131,6 +222,11 @@ class SekaiCarousel3D {
     }
     
     animate() {
+        if (!this.isVisible) {
+            this.animationFrame = null;
+            return;
+        }
+        
         if (this.isAutoRotating && !this.isDragging) {
             this.targetRotationY += this.autoRotateSpeed;
         }
@@ -138,35 +234,54 @@ class SekaiCarousel3D {
         const diffY = this.targetRotationY - this.currentRotationY;
         const diffX = this.targetRotationX - this.currentRotationX;
         
+        // Arrêt si pas de mouvement
+        if (Math.abs(diffY) < 0.001 && Math.abs(diffX) < 0.001 && !this.isAutoRotating) {
+            this.currentRotationY = this.targetRotationY;
+            this.currentRotationX = this.targetRotationX;
+            this.updateTransform();
+            return;
+        }
+        
         this.currentRotationY += diffY * 0.08;
         this.currentRotationX += diffX * 0.08;
         
-        if (this.rotation) {
-            this.rotation.style.transform = `rotateX(${this.currentRotationX}deg) rotateY(${this.currentRotationY}deg)`;
-        }
-        
+        this.updateTransform();
         this.updateFrontCards();
+        
         this.animationFrame = requestAnimationFrame(() => this.animate());
+    }
+    
+    updateTransform() {
+        if (!this.rotation) return;
+        
+        const transform = `rotateX(${this.currentRotationX}deg) rotateY(${this.currentRotationY}deg) translateZ(0)`;
+        this.rotation.style.transform = transform;
+        
+        if (Browser.isSafari || Browser.isEdge) {
+            this.rotation.style.webkitTransform = transform;
+        }
     }
     
     updateFrontCards() {
         const normalizedRotation = ((this.currentRotationY % 360) + 360) % 360;
         const totalCards = this.items.length;
         const degreesPerCard = 360 / totalCards;
-        let frontCardIndex = Math.round((360 - normalizedRotation) / degreesPerCard) % totalCards;
+        const frontCardIndex = Math.round((360 - normalizedRotation) / degreesPerCard) % totalCards;
         
-        this.items.forEach((item, index) => {
-            if (index === frontCardIndex) {
-                item.classList.add('is-front');
-            } else {
-                item.classList.remove('is-front');
-            }
+        requestAnimationFrame(() => {
+            this.items.forEach((item, index) => {
+                item.classList.toggle('is-front', index === frontCardIndex);
+            });
         });
     }
     
     destroy() {
         if (this.animationFrame) {
             cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+        }
+        if (this.visibilityObserver) {
+            this.visibilityObserver.disconnect();
         }
     }
 }
@@ -174,7 +289,6 @@ class SekaiCarousel3D {
 // ============================================
 // CAROUSEL EXPÉRIENCES
 // ============================================
-
 class ExperienceCarousel {
     constructor() {
         this.track = document.querySelector('.carousel-track');
@@ -183,79 +297,102 @@ class ExperienceCarousel {
         this.nextBtn = document.getElementById('nextBtn');
         this.pageInfo = document.getElementById('pageInfo');
         this.dotsContainer = document.getElementById('carouselDots');
-
+        
         this.currentIndex = 0;
         this.totalPages = this.items.length;
         this.isTransitioning = false;
-
+        
         if (this.track && this.items.length > 0) {
             this.init();
         }
     }
-
+    
     init() {
-        //consol.log('💼 Carousel expériences initialisé avec', this.totalPages, 'pages');
+        console.log('💼 Carousel expériences initialisé');
         this.createDots();
         this.updateCarousel();
         this.attachEvents();
         this.setupSwipeGestures();
         this.setupKeyboardNavigation();
     }
-
+    
     createDots() {
         if (!this.dotsContainer) return;
-        this.dotsContainer.innerHTML = '';
-
+        
+        const fragment = document.createDocumentFragment();
+        
         for (let i = 0; i < this.totalPages; i++) {
             const dot = document.createElement('div');
             dot.classList.add('dot');
             if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => this.goToPage(i));
-            this.dotsContainer.appendChild(dot);
+            dot.addEventListener('click', () => this.goToPage(i), { passive: true });
+            fragment.appendChild(dot);
         }
+        
+        this.dotsContainer.appendChild(fragment);
     }
-
+    
     updateCarousel() {
         if (!this.track) return;
-
+        
         const offset = -this.currentIndex * 100;
+        const transform = `translateX(${offset}%) translateZ(0)`;
+        
+        this.track.style.willChange = 'transform';
         this.track.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-        this.track.style.transform = `translateX(${offset}%)`;
-
+        this.track.style.transform = transform;
+        
+        if (Browser.isSafari || Browser.isEdge) {
+            this.track.style.webkitTransform = transform;
+        }
+        
+        setTimeout(() => {
+            this.track.style.willChange = 'auto';
+        }, 600);
+        
         if (this.pageInfo) {
             this.pageInfo.textContent = `${this.currentIndex + 1} / ${this.totalPages}`;
         }
-
+        
         if (this.dotsContainer) {
             const dots = this.dotsContainer.querySelectorAll('.dot');
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === this.currentIndex);
             });
         }
-
-        this.animateCurrentPageCards();
+        
+        setTimeout(() => this.animateCurrentPageCards(), 100);
     }
-
+    
     animateCurrentPageCards() {
         const currentPage = this.items[this.currentIndex];
         if (!currentPage) return;
-
+        
         const cards = currentPage.querySelectorAll('.experience-card');
-        cards.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            setTimeout(() => {
-                card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100 + index * 150);
+        
+        requestAnimationFrame(() => {
+            cards.forEach((card, index) => {
+                card.style.willChange = 'opacity, transform';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px) translateZ(0)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0) translateZ(0)';
+                    
+                    setTimeout(() => {
+                        card.style.willChange = 'auto';
+                    }, 600);
+                }, 100 + index * 150);
+            });
         });
     }
-
+    
     goToPage(index) {
         if (this.isTransitioning) return;
         this.isTransitioning = true;
-
+        
         if (index < 0) {
             this.currentIndex = this.totalPages - 1;
         } else if (index >= this.totalPages) {
@@ -263,47 +400,47 @@ class ExperienceCarousel {
         } else {
             this.currentIndex = index;
         }
-
+        
         this.updateCarousel();
-
-        setTimeout(() => {
-            this.isTransitioning = false;
-        }, 600);
+        setTimeout(() => { this.isTransitioning = false; }, 600);
     }
-
-    prev() {
-        this.goToPage(this.currentIndex - 1);
-    }
-
-    next() {
-        this.goToPage(this.currentIndex + 1);
-    }
-
+    
+    prev() { this.goToPage(this.currentIndex - 1); }
+    next() { this.goToPage(this.currentIndex + 1); }
+    
     attachEvents() {
-        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prev());
-        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.next());
+        if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prev(), { passive: true });
+        if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.next(), { passive: true });
     }
-
+    
     setupSwipeGestures() {
-        let startX = 0;
+        let startX = 0, startY = 0;
+        
         this.track.addEventListener('touchstart', (e) => {
-            startX = e.changedTouches[0].screenX;
-        });
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+        
         this.track.addEventListener('touchend', (e) => {
-            const endX = e.changedTouches[0].screenX;
-            const diff = startX - endX;
-            if (Math.abs(diff) > 50) {
-                diff > 0 ? this.next() : this.prev();
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const diffX = startX - endX;
+            const diffY = Math.abs(startY - endY);
+            
+            if (Math.abs(diffX) > 50 && diffY < 30) {
+                diffX > 0 ? this.next() : this.prev();
             }
-        });
+        }, { passive: true });
     }
-
+    
     setupKeyboardNavigation() {
         document.addEventListener('keydown', (e) => {
             const experiencesSection = document.querySelector('.section-experiences');
             if (!experiencesSection) return;
+            
             const rect = experiencesSection.getBoundingClientRect();
             const isInView = rect.top < window.innerHeight && rect.bottom >= 0;
+            
             if (isInView) {
                 if (e.key === 'ArrowLeft') this.prev();
                 if (e.key === 'ArrowRight') this.next();
@@ -315,137 +452,69 @@ class ExperienceCarousel {
 // ============================================
 // NAVIGATION MOBILE
 // ============================================
-
 function initMobileNavigation() {
-    //consol.log('🍔 Initialisation du menu hamburger...');
+    console.log('🍔 Menu hamburger');
     
-    // Attendre un peu pour être sûr que le DOM est prêt
-    setTimeout(() => {
-        const navToggle = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
-        const navOverlay = document.getElementById('navOverlay');
-        const navLinks = document.querySelectorAll('.nav-link');
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    const navOverlay = document.getElementById('navOverlay');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    if (!navToggle || !navMenu || !navOverlay) {
+        console.error('❌ Éléments navigation manquants');
+        return;
+    }
+    
+    function closeMenu() {
+        navToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    }
+    
+    function toggleMenu(e) {
+        if (e) e.preventDefault();
         
-        //consol.log('🔍 navToggle:', navToggle);
-        //consol.log('🔍 navMenu:', navMenu);
-        //consol.log('🔍 navOverlay:', navOverlay);
-        //consol.log('🔍 navLinks:', navLinks.length);
-        
-        if (!navToggle || !navMenu || !navOverlay) {
-            console.error('❌ Éléments de navigation manquants');
-            console.error('navToggle:', !!navToggle);
-            console.error('navMenu:', !!navMenu);
-            console.error('navOverlay:', !!navOverlay);
-            return;
-        }
-        
-        //consol.log('✅ Éléments de navigation trouvés');
-        
-        function openMenu() {
-            //consol.log('📂 Ouverture du menu');
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        } else {
             navToggle.classList.add('active');
             navMenu.classList.add('active');
             navOverlay.classList.add('active');
             document.body.classList.add('menu-open');
-            
-            // Force l'affichage (au cas où)
-            navMenu.style.transform = 'translateX(0)';
-            navOverlay.style.opacity = '1';
-            navOverlay.style.visibility = 'visible';
         }
-        
-        function closeMenu() {
-            //consol.log('📁 Fermeture du menu');
-            navToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            navOverlay.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            
-            // Reset les styles
-            navMenu.style.transform = 'translateX(100%)';
-            navOverlay.style.opacity = '0';
-            navOverlay.style.visibility = 'hidden';
-        }
-        
-        function toggleMenu(e) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            //consol.log('🖱️ Toggle menu - État actuel:', navMenu.classList.contains('active'));
-            
-            if (navMenu.classList.contains('active')) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        }
-        
-        // Event listener sur le bouton hamburger
-        navToggle.addEventListener('click', toggleMenu);
-        //consol.log('✅ Event listener ajouté sur navToggle');
-        
-        // Event listener sur l'overlay
-        navOverlay.addEventListener('click', (e) => {
-            e.preventDefault();
-            //consol.log('🖱️ Clic sur overlay');
-            closeMenu();
+    }
+    
+    navToggle.addEventListener('click', toggleMenu);
+    navOverlay.addEventListener('click', closeMenu);
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) closeMenu();
         });
-        //consol.log('✅ Event listener ajouté sur navOverlay');
-        
-        // Event listener sur les liens
-        navLinks.forEach((link, index) => {
-            link.addEventListener('click', () => {
-                //consol.log(`🖱️ Clic sur lien ${index + 1}`);
-                if (window.innerWidth <= 768) {
-                    closeMenu();
-                }
-            });
-        });
-        //consol.log('✅ Event listeners ajoutés sur', navLinks.length, 'liens');
-        
-        // Fermer avec Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                //consol.log('⌨️ Escape pressé');
-                closeMenu();
-            }
-        });
-        
-        //consol.log('✅ Menu hamburger complètement initialisé');
-        
-        // Test automatique après 1 seconde
-        setTimeout(() => {
-            //consol.log('🧪 Test automatique du menu...');
-            const rect = navToggle.getBoundingClientRect();
-            //consol.log('Position du bouton:', rect);
-            //consol.log('Largeur fenêtre:', window.innerWidth);
-        }, 1000);
-        
-    }, 100);
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) closeMenu();
+    });
 }
 
 // ============================================
 // SCROLL NAVIGATION
 // ============================================
-
 function initScrollNavigation() {
     const navbar = document.querySelector('.navbar');
     if (!navbar) return;
     
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+    const handleScroll = throttleRAF(() => {
+        navbar.classList.toggle('scrolled', window.pageYOffset > 100);
     });
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
 }
 
 // ============================================
 // ANIMATION RIDEAU + HERO
 // ============================================
-
 function initCurtainAndHeroAnimation() {
     const transitionInitial = document.querySelector('.page-transition-initial');
     const curtainLeft = document.querySelector('.curtain-left');
@@ -453,23 +522,38 @@ function initCurtainAndHeroAnimation() {
     const heroTitle = document.querySelector('.hero-title');
     const heroSubtitle = document.querySelector('.hero-subtitle');
     const ctaButton = document.querySelector('.cta-button');
-
+    
     setTimeout(() => {
         if (curtainLeft && curtainRight) {
-            curtainLeft.style.transform = 'translateX(-100%)';
-            curtainRight.style.transform = 'translateX(100%)';
+            curtainLeft.style.willChange = 'transform';
+            curtainRight.style.willChange = 'transform';
+            
+            const transform = 'translateX(-100%) translateZ(0)';
+            curtainLeft.style.transform = transform;
+            curtainRight.style.transform = transform.replace('-100%', '100%');
+            
+            if (Browser.isSafari) {
+                curtainLeft.style.webkitTransform = transform;
+                curtainRight.style.webkitTransform = transform.replace('-100%', '100%');
+            }
             
             setTimeout(() => {
-                if (heroTitle) heroTitle.classList.add('animate-in');
-            }, 300);
+                curtainLeft.style.willChange = 'auto';
+                curtainRight.style.willChange = 'auto';
+            }, 1200);
             
-            setTimeout(() => {
-                if (heroSubtitle) heroSubtitle.classList.add('animate-in');
-            }, 600);
-            
-            setTimeout(() => {
-                if (ctaButton) ctaButton.classList.add('animate-in');
-            }, 900);
+            const delays = [[heroTitle, 300], [heroSubtitle, 600], [ctaButton, 900]];
+            delays.forEach(([el, delay]) => {
+                if (el) {
+                    setTimeout(() => {
+                        el.style.willChange = 'opacity, transform';
+                        el.classList.add('animate-in');
+                        setTimeout(() => {
+                            el.style.willChange = 'auto';
+                        }, 1000);
+                    }, delay);
+                }
+            });
         }
         
         setTimeout(() => {
@@ -482,286 +566,156 @@ function initCurtainAndHeroAnimation() {
 // ============================================
 // ANIMATIONS GSAP
 // ============================================
-
 function initGSAPAnimations() {
     if (typeof gsap === 'undefined') {
         console.warn('⚠️ GSAP non chargé');
         return;
     }
     
-    //consol.log('✅ GSAP chargé - Initialisation des animations');
+    console.log('✅ GSAP chargé');
     gsap.registerPlugin(ScrollTrigger);
     
-    setTimeout(() => {
-        ScrollTrigger.refresh();
-    }, 100);
+    if (Browser.isSafari) {
+        ScrollTrigger.config({
+            autoRefreshEvents: "visibilitychange,DOMContentLoaded,load",
+            ignoreMobileResize: true,
+            limitCallbacks: true
+        });
+    }
+    
+    ScrollTrigger.normalizeScroll(true);
+    setTimeout(() => ScrollTrigger.refresh(), 100);
+    
+    const commonConfig = {
+        scrollTrigger: {
+            toggleActions: 'play none none reverse',
+            once: false,
+            fastScrollEnd: true,
+            preventOverlaps: true
+        },
+        ease: 'power2.out',
+        duration: 0.8,
+        force3D: true
+    };
     
     // À propos
     gsap.fromTo('.apropos-text',
-        { y: 60, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.section-apropos',
-                start: 'top 70%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 1,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out'
-        }
+        { y: 40, opacity: 0 },
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.section-apropos', start: 'top 75%' }, y: 0, opacity: 1 }
     );
     
     gsap.fromTo('.stat-card',
-        { y: 40, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.stats-grid',
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            ease: 'power3.out'
-        }
+        { y: 30, opacity: 0 },
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.stats-grid', start: 'top 80%' }, y: 0, opacity: 1, stagger: 0.1 }
     );
     
-    // Compétences 3D
+    // Carousel 3D
     gsap.fromTo('.carousel-3d',
-        { scale: 0.8, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.section-competences',
-                start: 'top 70%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 1.2,
-            scale: 1,
-            opacity: 1,
-            ease: 'power3.out'
-        }
+        { scale: 0.9, opacity: 0 },
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.section-competences', start: 'top 70%' }, duration: 1, scale: 1, opacity: 1 }
     );
     
     // Expériences
     gsap.fromTo('.section-header',
-        { y: 30, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.section-experiences',
-                start: 'top 70%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out'
-        }
+        { y: 25, opacity: 0 },
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.section-experiences', start: 'top 75%' }, y: 0, opacity: 1 }
     );
     
     // Frameworks
     gsap.fromTo('.frameworks-track',
         { opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.section-frameworks',
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 1,
-            opacity: 1,
-            ease: 'power3.out'
-        }
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.section-frameworks', start: 'top 80%' }, duration: 0.6, opacity: 1 }
     );
     
-    // Projets
-    const projetsCards = document.querySelectorAll('.projet-card');
-    if (projetsCards.length > 0) {
-        gsap.fromTo(projetsCards,
-            { y: 60, opacity: 0 },
-            {
-                scrollTrigger: {
-                    trigger: '.section-projets',
-                    start: 'top 70%',
-                    toggleActions: 'play none none reverse'
-                },
-                duration: 0.8,
-                y: 0,
-                opacity: 1,
-                stagger: 0.15,
-                ease: 'power3.out'
-            }
-        );
-    }
+    // Projets, Formations, Passions
+    const cardSections = [
+        { selector: '.projet-card', trigger: '.section-projets' },
+        { selector: '.formation-item', trigger: '.section-formations' },
+        { selector: '.passion-visual-card', trigger: '.section-passions' }
+    ];
     
-    // Formations
-    const formationsCards = document.querySelectorAll('.formation-item');
-    if (formationsCards.length > 0) {
-        gsap.fromTo(formationsCards,
-            { y: 60, opacity: 0 },
-            {
-                scrollTrigger: {
-                    trigger: '.section-formations',
-                    start: 'top 70%',
-                    toggleActions: 'play none none reverse'
-                },
-                duration: 0.8,
-                y: 0,
-                opacity: 1,
-                stagger: 0.15,
-                ease: 'power3.out'
-            }
-        );
-    }
-    
-    // Passions
-    const passionsCards = document.querySelectorAll('.passion-visual-card');
-    if (passionsCards.length > 0) {
-        gsap.fromTo(passionsCards,
-            { y: 60, opacity: 0 },
-            {
-                scrollTrigger: {
-                    trigger: '.section-passions',
-                    start: 'top 70%',
-                    toggleActions: 'play none none reverse'
-                },
-                duration: 0.8,
-                y: 0,
-                opacity: 1,
-                stagger: 0.15,
-                ease: 'power3.out'
-            }
-        );
-    }
+    cardSections.forEach(config => {
+        const cards = document.querySelectorAll(config.selector);
+        if (cards.length > 0) {
+            gsap.fromTo(cards,
+                { y: 40, opacity: 0 },
+                { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: config.trigger, start: 'top 75%' }, y: 0, opacity: 1, stagger: 0.12 }
+            );
+        }
+    });
     
     // Contact
     gsap.fromTo('.contact-text',
-        { y: 50, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.section-contact',
-                start: 'top 70%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 1,
-            y: 0,
-            opacity: 1,
-            ease: 'power3.out'
-        }
+        { y: 35, opacity: 0 },
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.section-contact', start: 'top 75%' }, y: 0, opacity: 1 }
     );
     
     gsap.fromTo('.contact-btn',
-        { y: 30, opacity: 0 },
-        {
-            scrollTrigger: {
-                trigger: '.contact-links',
-                start: 'top 80%',
-                toggleActions: 'play none none reverse'
-            },
-            duration: 0.8,
-            y: 0,
-            opacity: 1,
-            stagger: 0.15,
-            ease: 'power3.out'
-        }
+        { y: 25, opacity: 0 },
+        { ...commonConfig, scrollTrigger: { ...commonConfig.scrollTrigger, trigger: '.contact-links', start: 'top 80%' }, y: 0, opacity: 1, stagger: 0.1 }
     );
-    
-    ////consol.log('✨ Animations GSAP configurées');
 }
 
 // ============================================
 // PARALLAXE HERO
 // ============================================
-
 function initHeroParallax() {
     const heroContent = document.querySelector('.hero-content');
+    if (!heroContent) return;
     
-    if (heroContent) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallax = scrolled * 0.3;
-            heroContent.style.transform = `translateY(${parallax}px)`;
-        });
-    }
+    let ticking = false;
+    
+    const handleParallax = () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrolled = window.pageYOffset;
+                
+                if (scrolled > window.innerHeight * 0.5) {
+                    ticking = false;
+                    return;
+                }
+                
+                const parallax = scrolled * 0.25;
+                const transform = `translateY(${parallax}px) translateZ(0)`;
+                
+                heroContent.style.transform = transform;
+                if (Browser.isSafari) heroContent.style.webkitTransform = transform;
+                
+                ticking = false;
+            });
+            ticking = true;
+        }
+    };
+    
+    window.addEventListener('scroll', handleParallax, { passive: true });
 }
 
-//============================================
- //CURSEUR CUSTOM (Desktop uniquement)
- //============================================
-
-function initCustomCursor() {
-    if (window.innerWidth <= 768) return;
-    
-    /*const cursor = document.createElement('div');
-    cursor.style.cssText = `
-        width: 40px;
-        height: 40px;
-        border: 2px solid white;
-        border-radius: 50%;
-        position: fixed;
-        pointer-events: none;
-        z-index: 9999;
-        mix-blend-mode: difference;
-        transition: transform 0.2s ease;
-        display: none;
-    `;
-    document.body.appendChild(cursor);*/
-    
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.display = 'block';
-        cursor.style.left = e.clientX - 20 + 'px';
-        cursor.style.top = e.clientY - 20 + 'px';
-    });
-    
-    const clickables = document.querySelectorAll('a, button, .skill-card, .passion-visual-card, .carousel-control, .experience-card');
-    clickables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.style.transform = 'scale(1.5)';
-        });
-        el.addEventListener('mouseleave', () => {
-            cursor.style.transform = 'scale(1)';
-        });
-    });
-} 
-
 // ============================================
-// INITIALISATION PRINCIPALE
+// INITIALISATION
 // ============================================
-
 let sekaiCarousel = null;
 let experienceCarousel = null;
-let navigationInitialized = false;
+let initialized = false;
 
-// Fonction d'initialisation complète
 function initializeEverything() {
-    if (navigationInitialized) {
-        //consol.log('⚠️ Navigation déjà initialisée, skip');
-        return;
-    }
+    if (initialized) return;
+    initialized = true;
     
-    //consol.log('🚀 Initialisation complète...');
+    console.log('🚀 Initialisation complète');
     
-    // Navigation (PRIORITÉ 1)
     initMobileNavigation();
     initScrollNavigation();
-    navigationInitialized = true;
     
-    // Animation rideau + hero
     if (!document.body.classList.contains('curtain-animation-done')) {
         initCurtainAndHeroAnimation();
     }
     
-    // Animations GSAP
-    initGSAPAnimations();
+    if (typeof gsap !== 'undefined') {
+        initGSAPAnimations();
+    }
     
-    // Parallaxe Hero
     initHeroParallax();
     
-    // Curseur custom
-    initCustomCursor();
-    
-    // Carousels
     if (document.querySelector('.carousel-track') && !experienceCarousel) {
         experienceCarousel = new ExperienceCarousel();
     }
@@ -772,9 +726,12 @@ function initializeEverything() {
     
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+        anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const target = document.querySelector(targetId);
             if (target) {
                 const offsetTop = target.offsetTop - 80;
                 window.scrollTo({
@@ -784,41 +741,54 @@ function initializeEverything() {
             }
         });
     });
+    
+    console.log('✨ Initialisation terminée');
 }
 
-// Méthode 1 : sectionsLoaded
+// Événements
 document.addEventListener('sectionsLoaded', () => {
-    //consol.log('✨ Event sectionsLoaded déclenché');
     setTimeout(initializeEverything, 200);
 });
 
-// Méthode 2 : DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-    //consol.log('✨ DOMContentLoaded déclenché');
     setTimeout(() => {
-        if (!navigationInitialized) {
-            //consol.log('⚠️ Navigation pas encore initialisée via sectionsLoaded');
-            initializeEverything();
-        }
+        if (!initialized) initializeEverything();
     }, 500);
 });
 
-// Méthode 3 : window.load (dernier recours)
 window.addEventListener('load', () => {
-    //consol.log('✨ window.load déclenché');
     setTimeout(() => {
-        if (!navigationInitialized) {
-            //consol.log('⚠️ Fallback final - initialisation forcée');
-            initializeEverything();
-        }
+        if (!initialized) initializeEverything();
     }, 1000);
 });
 
-//consol.log('✨ Script principal chargé');
+// Cleanup
+window.addEventListener('beforeunload', () => {
+    if (sekaiCarousel) sekaiCarousel.destroy();
+    console.log('🧹 Cleanup effectué');
+});
 
-// Dans js/script.js - Ajoute ce debug
-/*consol.log('🍔 État du menu:', {
-    toggle: !!document.getElementById('navToggle'),
-    menu: !!document.getElementById('navMenu'),
-    overlay: !!document.getElementById('navOverlay')
-});*/
+// Resize
+const handleResize = debounce(() => {
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+    }
+}, 250);
+
+window.addEventListener('resize', handleResize, { passive: true });
+
+// Visibilité page
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        if (sekaiCarousel && sekaiCarousel.animationFrame) {
+            cancelAnimationFrame(sekaiCarousel.animationFrame);
+            sekaiCarousel.animationFrame = null;
+        }
+    } else {
+        if (sekaiCarousel && sekaiCarousel.isVisible && !sekaiCarousel.animationFrame) {
+            sekaiCarousel.animate();
+        }
+    }
+});
+
+console.log('✨ Script optimisé chargé');

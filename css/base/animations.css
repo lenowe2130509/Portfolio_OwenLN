@@ -1,13 +1,42 @@
 /* ============================================
-   ANIMATIONS GLOBALES - OPTIMISÉES
+   ANIMATIONS.CSS - VERSION ULTRA-OPTIMISÉE
+   Compatible: Chrome, Safari, Firefox, Edge
+   Performance: GPU-accelerated, 60 FPS
    ============================================ */
 
-/* Animation de rideau au chargement */
+/* ============================================
+   OPTIMISATION GPU GLOBALE
+   ============================================ */
+.hero,
+.carousel-3d,
+.carousel-rotation,
+.carousel-items,
+.carousel-item,
+.skill-card,
+.experience-card,
+.projet-card,
+.passion-visual-card,
+.formation-item {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   ANIMATION RIDEAU
+   ============================================ */
 .page-transition-initial {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 9999;
     pointer-events: none;
+    will-change: transform;
 }
 
 .curtain {
@@ -17,6 +46,11 @@
     height: 100%;
     background: white;
     transition: transform 1.2s cubic-bezier(0.76, 0, 0.24, 1);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
 }
 
 .curtain-left {
@@ -27,29 +61,61 @@
     right: 0;
 }
 
-/* Animations du Hero coordonnées avec le rideau */
+body.curtain-animation-done .curtain {
+    will-change: auto;
+}
+
+/* ============================================
+   KEYFRAMES OPTIMISÉES
+   ============================================ */
+
+/* Title Reveal */
 @keyframes titleReveal {
     0% {
         opacity: 0;
-        transform: scale(0.8);
+        transform: scale(0.9) translateZ(0);
     }
     100% {
         opacity: 1;
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
     }
 }
 
+@-webkit-keyframes titleReveal {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0.9) translateZ(0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateZ(0);
+    }
+}
+
+/* Fade In Up */
 @keyframes fadeInUp {
     0% {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translate3d(0, 20px, 0);
     }
     100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate3d(0, 0, 0);
     }
 }
 
+@-webkit-keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 20px, 0);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Fade In */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -59,86 +125,294 @@
     }
 }
 
-@keyframes fadeInControls {
-    to { 
-        opacity: 1; 
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 
-/* Effet de pulsation */
+/* Fade In Controls */
+@keyframes fadeInControls {
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeInControls {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Pulse */
 @keyframes pulse {
     0%, 100% {
-        transform: scale(1);
+        transform: scale(1) translateZ(0);
     }
     50% {
-        transform: scale(1.1);
+        transform: scale(1.1) translateZ(0);
+    }
+}
+
+@-webkit-keyframes pulse {
+    0%, 100% {
+        -webkit-transform: scale(1) translateZ(0);
+    }
+    50% {
+        -webkit-transform: scale(1.1) translateZ(0);
     }
 }
 
 /* ============================================
-   CLASSES D'ANIMATION
+   CLASSES D'ANIMATION HERO
    ============================================ */
-
-/* Animation des éléments Hero */
 .hero-title.animate-in {
     animation: titleReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    -webkit-animation: titleReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    will-change: opacity, transform;
 }
 
 .hero-subtitle.animate-in {
     animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    -webkit-animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    will-change: opacity, transform;
 }
 
 .cta-button.animate-in {
     animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    -webkit-animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    will-change: opacity, transform;
 }
 
-/* États initiaux des éléments animés */
+/* États initiaux */
 .hero-title:not(.animate-in) {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.9) translateZ(0);
+    -webkit-transform: scale(0.9) translateZ(0);
 }
 
-.hero-subtitle:not(.animate-in) {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
+.hero-subtitle:not(.animate-in),
 .cta-button:not(.animate-in) {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate3d(0, 20px, 0);
+    -webkit-transform: translate3d(0, 20px, 0);
 }
 
-/* Autres éléments animés par GSAP */
+/* ============================================
+   OPTIMISATION 3D CAROUSEL
+   ============================================ */
+.carousel-3d {
+    perspective: 1200px;
+    -webkit-perspective: 1200px;
+    isolation: isolate;
+}
+
+.carousel-rotation {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.carousel-items {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+}
+
+.carousel-item {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: opacity 0.6s ease;
+}
+
+.carousel-3d.dragging .carousel-rotation {
+    will-change: transform;
+}
+
+.carousel-3d:not(.dragging) .carousel-rotation {
+    will-change: auto;
+}
+
+.rotation-indicator {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.carousel-3d.dragging .rotation-indicator {
+    opacity: 1;
+}
+
+/* ============================================
+   CAROUSEL EXPÉRIENCES
+   ============================================ */
+.carousel-track {
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.carousel-track.transitioning {
+    will-change: transform;
+}
+
+.carousel-track:not(.transitioning) {
+    will-change: auto;
+}
+
+.experience-card {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+    -webkit-transform: translate3d(0, 30px, 0);
+}
+
+/* ============================================
+   TRANSITIONS OPTIMISÉES
+   ============================================ */
+.cta-button,
+.contact-btn,
+.projet-card,
+.passion-visual-card,
+.carousel-control {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+.cta-button:hover,
+.contact-btn:hover,
+.projet-card:hover,
+.passion-visual-card:hover {
+    will-change: transform;
+    transform: translateY(-5px) translateZ(0);
+    -webkit-transform: translateY(-5px) translateZ(0);
+}
+
+.cta-button:not(:hover),
+.contact-btn:not(:hover),
+.projet-card:not(:hover),
+.passion-visual-card:not(:hover) {
+    will-change: auto;
+}
+
+/* ============================================
+   SMOOTH SCROLL
+   ============================================ */
+html {
+    scroll-behavior: smooth;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+    html {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ============================================
+   ÉLÉMENTS ANIMÉS - ÉTATS INITIAUX
+   ============================================ */
 .apropos-text,
 .stat-card,
-.carousel-3d,
-.experience-card,
-.passion-visual-card,
+.section-header,
 .contact-text,
-.contact-btn {
+.contact-btn,
+.formation-item,
+.projet-card,
+.passion-visual-card {
     opacity: 0;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
-.apropos-text.gsap-animated,
-.stat-card.gsap-animated,
-.carousel-3d.gsap-animated,
-.experience-card.gsap-animated,
-.passion-visual-card.gsap-animated,
-.contact-text.gsap-animated,
-.contact-btn.gsap-animated {
+.gsap-animated {
     opacity: 1;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.navbar {
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(0, 0, 0, 0.95);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.nav-menu {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), 
+                opacity 0.6s ease;
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        transform: translate3d(100%, 0, 0);
+        -webkit-transform: translate3d(100%, 0, 0);
+        opacity: 0;
+    }
+    
+    .nav-menu.active {
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+        opacity: 1;
+        will-change: transform, opacity;
+    }
+    
+    .nav-menu:not(.active) {
+        will-change: auto;
+    }
+}
+
+/* ============================================
+   DOTS PAGINATION
+   ============================================ */
+.dot {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    transform: scale(1) translateZ(0);
+    -webkit-transform: scale(1) translateZ(0);
+}
+
+.dot:hover {
+    transform: scale(1.2) translateZ(0);
+    -webkit-transform: scale(1.2) translateZ(0);
+}
+
+.dot.active {
+    transform: scale(1.3) translateZ(0);
+    -webkit-transform: scale(1.3) translateZ(0);
 }
 
 /* ============================================
    PRÉFÉRENCE ANIMATIONS RÉDUITES
    ============================================ */
-
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
         animation-duration: 0.01ms !important;
+        -webkit-animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+        -webkit-animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
@@ -148,65 +422,102 @@
     .hero-subtitle,
     .cta-button,
     .carousel-track,
-    .experience-card,
-    .carousel-btn,
-    .skill-badge,
-    .dot {
+    .experience-card {
         transition: none !important;
         animation: none !important;
+        -webkit-animation: none !important;
         opacity: 1 !important;
         transform: none !important;
+        -webkit-transform: none !important;
     }
 }
 
 /* ============================================
-   ANIMATIONS RESPONSIVE
+   OPTIMISATION MOBILE
    ============================================ */
-
 @media (max-width: 768px) {
+    /* Touch optimization */
+    .carousel-3d,
+    .carousel-item,
+    .cta-button,
+    button,
+    a {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    /* Désactive parallaxe */
+    .hero-content {
+        transform: none !important;
+        -webkit-transform: none !important;
+    }
+    
+    /* Animations réduites */
     @keyframes titleReveal {
         0% {
             opacity: 0;
-            transform: scale(0.9);
+            transform: scale(0.95) translateZ(0);
         }
         100% {
             opacity: 1;
-            transform: scale(1);
+            transform: scale(1) translateZ(0);
         }
     }
     
-    @keyframes fadeInUp {
+    @-webkit-keyframes titleReveal {
         0% {
             opacity: 0;
-            transform: translateY(15px);
+            -webkit-transform: scale(0.95) translateZ(0);
         }
         100% {
             opacity: 1;
-            transform: translateY(0);
+            -webkit-transform: scale(1) translateZ(0);
         }
     }
 }
 
-@media (max-width: 480px) {
-    @keyframes titleReveal {
-        0% {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-    @keyframes fadeInUp {
-        0% {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
+/* ============================================
+   ANTI-ALIASING
+   ============================================ */
+body,
+.hero-title,
+.section-title,
+.skill-card,
+.experience-card {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Image optimization */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* ============================================
+   WILL-CHANGE CLASSES UTILITAIRES
+   ============================================ */
+.will-change-transform {
+    will-change: transform;
+}
+
+.will-change-opacity {
+    will-change: opacity;
+}
+
+/* ============================================
+   PERFORMANCE TIPS
+   ============================================ */
+img,
+video {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+.card-shadow {
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }

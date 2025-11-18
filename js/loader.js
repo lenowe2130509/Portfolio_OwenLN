@@ -1,5 +1,5 @@
 // ============================================
-// LOADER - Chargement des sections HTML
+// LOADER - VERSION CORRIGÉE
 // ============================================
 
 class SectionLoader {
@@ -25,48 +25,61 @@ class SectionLoader {
     
     async loadSection(section) {
         try {
+            console.log(`📥 Chargement ${section.file}...`);
+            
             const response = await fetch(section.file);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP ${response.status} - ${section.file}`);
             }
+            
             const html = await response.text();
             const placeholder = document.getElementById(`${section.id}-placeholder`);
             
             if (placeholder) {
                 placeholder.outerHTML = html;
                 this.loadedCount++;
-                //consol.log(`✅ Section ${section.id} chargée (${this.loadedCount}/${this.totalSections})`);
+                console.log(`✅ ${section.id} chargée (${this.loadedCount}/${this.totalSections})`);
             } else {
-                console.warn(`⚠️ Placeholder ${section.id}-placeholder non trouvé`);
+                console.warn(`⚠️ Placeholder #${section.id}-placeholder non trouvé`);
             }
+            
         } catch (error) {
-            console.error(`❌ Erreur lors du chargement de ${section.file}:`, error);
+            console.error(`❌ Erreur ${section.file}:`, error);
         }
     }
     
     async loadAll() {
-        //consol.log('🚀 Début du chargement des sections...');
+        console.log('🚀 Début chargement sections...');
         
-        // Charger toutes les sections en parallèle
+        // Charge sections en parallèle
         await Promise.all(
             this.sections.map(section => this.loadSection(section))
         );
         
-        //consol.log(`✨ ${this.loadedCount}/${this.totalSections} sections chargées!`);
+        console.log(`✨ ${this.loadedCount}/${this.totalSections} sections chargées`);
         
-        // Déclencher un événement personnalisé
+        // Déclenche événement
         document.dispatchEvent(new Event('sectionsLoaded'));
+        console.log('📢 Event sectionsLoaded déclenché');
     }
 }
 
-// Initialiser le chargement dès que possible
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        const loader = new SectionLoader();
-        loader.loadAll();
-    });
-} else {
-    // Le DOM est déjà chargé
+// ============================================
+// INITIALISATION
+// ============================================
+
+function initLoader() {
+    console.log('🔧 Loader.js chargé');
     const loader = new SectionLoader();
     loader.loadAll();
 }
+
+// Démarre dès que possible
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoader);
+} else {
+    initLoader();
+}
+
+console.log('✅ Loader.js prêt');
