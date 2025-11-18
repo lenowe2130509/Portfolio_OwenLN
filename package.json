@@ -6,12 +6,12 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "live-server": "^1.2.0"
+    "live-server": "^1.2.2"
   },
   "scripts": {
-  "start:chrome": "cross-env BROWSER='Google Chrome' live-server ./",
-  "start:safari": "cross-env BROWSER=safari live-server ./",
-  "start:firefox": "cross-env BROWSER=firefox live-server ./"
-}
-
+    "start": "live-server ./",
+    "start:chrome": "cross-env BROWSER='Google Chrome' live-server ./",
+    "start:safari": "cross-env BROWSER=safari live-server ./",
+    "start:firefox": "cross-env BROWSER=firefox live-server ./"
+  }
 }
