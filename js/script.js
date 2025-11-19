@@ -49,6 +49,11 @@ function throttleRAF(func) {
 // ============================================
 // CAROUSEL 3D SEKAI - ULTRA-OPTIMISÉ
 // ============================================
+// ============================================
+// FIX CAROUSEL 3D - Dans js/script.js
+// Remplace UNIQUEMENT la classe SekaiCarousel3D
+// ============================================
+
 class SekaiCarousel3D {
     constructor() {
         this.carousel = document.querySelector('.carousel-3d');
@@ -72,7 +77,10 @@ class SekaiCarousel3D {
         this.isAutoRotating = true;
         this.animationFrame = null;
         
-        // ⚡ CRITIQUE: Gestion visibilité
+        // ⚡ NOUVEAU: Timer pour redémarrage auto
+        this.autoRestartTimer = null;
+        
+        // ⚡ Gestion visibilité
         this.isVisible = false;
         this.visibilityObserver = null;
         
@@ -137,18 +145,20 @@ class SekaiCarousel3D {
         if (this.rightControl) {
             this.rightControl.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log('➡️ Clic flèche droite');
                 this.stopAutoRotation();
                 this.rotateBy(-45, 0);
-                setTimeout(() => this.startAutoRotation(), 3000);
+                this.scheduleAutoRestart(3000); // ⚡ FIX ICI
             }, { passive: false });
         }
         
         if (this.leftControl) {
             this.leftControl.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log('⬅️ Clic flèche gauche');
                 this.stopAutoRotation();
                 this.rotateBy(45, 0);
-                setTimeout(() => this.startAutoRotation(), 3000);
+                this.scheduleAutoRestart(3000); // ⚡ FIX ICI
             }, { passive: false });
         }
     }
@@ -182,6 +192,7 @@ class SekaiCarousel3D {
         this.startRotationX = this.currentRotationX;
         this.stopAutoRotation();
         this.carousel.classList.add('dragging');
+        console.log('👆 Drag start');
     }
     
     onDragMove(e) {
@@ -205,7 +216,25 @@ class SekaiCarousel3D {
         this.isDragging = false;
         this.carousel.classList.remove('dragging');
         this.targetRotationX = 0;
-        setTimeout(() => this.startAutoRotation(), 2000);
+        console.log('👆 Drag end');
+        this.scheduleAutoRestart(2000); // ⚡ FIX ICI
+    }
+    
+    // ⚡ NOUVELLE MÉTHODE: Programme le redémarrage
+    scheduleAutoRestart(delay = 3000) {
+        console.log(`⏰ Auto-rotation redémarrera dans ${delay}ms`);
+        
+        // Annule le timer précédent si existant
+        if (this.autoRestartTimer) {
+            clearTimeout(this.autoRestartTimer);
+        }
+        
+        // Programme le redémarrage
+        this.autoRestartTimer = setTimeout(() => {
+            console.log('🔄 Redémarrage auto-rotation');
+            this.startAutoRotation();
+            this.autoRestartTimer = null;
+        }, delay);
     }
     
     rotateBy(degreesY, degreesX) {
@@ -214,11 +243,23 @@ class SekaiCarousel3D {
     }
     
     startAutoRotation() {
+        if (!this.isAutoRotating) {
+            console.log('▶️ Auto-rotation activée');
+        }
         this.isAutoRotating = true;
     }
     
     stopAutoRotation() {
+        if (this.isAutoRotating) {
+            console.log('⏸️ Auto-rotation désactivée');
+        }
         this.isAutoRotating = false;
+        
+        // Annule aussi le timer de redémarrage
+        if (this.autoRestartTimer) {
+            clearTimeout(this.autoRestartTimer);
+            this.autoRestartTimer = null;
+        }
     }
     
     animate() {
@@ -234,20 +275,21 @@ class SekaiCarousel3D {
         const diffY = this.targetRotationY - this.currentRotationY;
         const diffX = this.targetRotationX - this.currentRotationX;
         
-        // Arrêt si pas de mouvement
-        if (Math.abs(diffY) < 0.001 && Math.abs(diffX) < 0.001 && !this.isAutoRotating) {
+        // Arrêt si pas de mouvement ET pas d'auto-rotation
+        if (Math.abs(diffY) < 0.001 && Math.abs(diffX) < 0.001 && !this.isAutoRotating && !this.isDragging) {
             this.currentRotationY = this.targetRotationY;
             this.currentRotationX = this.targetRotationX;
             this.updateTransform();
-            return;
+            // ⚡ Ne pas return ici - continue l'animation pour être prêt au redémarrage
+        } else {
+            this.currentRotationY += diffY * 0.08;
+            this.currentRotationX += diffX * 0.08;
+            
+            this.updateTransform();
+            this.updateFrontCards();
         }
         
-        this.currentRotationY += diffY * 0.08;
-        this.currentRotationX += diffX * 0.08;
-        
-        this.updateTransform();
-        this.updateFrontCards();
-        
+        // ⚡ Continue toujours l'animation si visible
         this.animationFrame = requestAnimationFrame(() => this.animate());
     }
     
@@ -256,6 +298,11 @@ class SekaiCarousel3D {
         
         const transform = `rotateX(${this.currentRotationX}deg) rotateY(${this.currentRotationY}deg) translateZ(0)`;
         this.rotation.style.transform = transform;
+        
+        const Browser = {
+            isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
+            isEdge: /Edg/.test(navigator.userAgent)
+        };
         
         if (Browser.isSafari || Browser.isEdge) {
             this.rotation.style.webkitTransform = transform;
@@ -283,6 +330,11 @@ class SekaiCarousel3D {
         if (this.visibilityObserver) {
             this.visibilityObserver.disconnect();
         }
+        if (this.autoRestartTimer) {
+            clearTimeout(this.autoRestartTimer);
+            this.autoRestartTimer = null;
+        }
+        console.log('🧹 Carousel détruit');
     }
 }
 

@@ -19,8 +19,8 @@
 .formation-item {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -202,8 +202,33 @@ body.curtain-animation-done .curtain {
 }
 
 /* ============================================
-   OPTIMISATION 3D CAROUSEL
+   CAROUSEL 3D OPTIMISÉ - HOVER CORRECT
    ============================================ */
+.carousel-item {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    backface-visibility: visible; /* important pour voir les faces */
+    -webkit-backface-visibility: visible;
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    opacity: 1; /* ne plus mettre 0 par défaut */
+    z-index: 1;
+    pointer-events: auto;
+}
+
+/* Quand on hover sur un item */
+.carousel-item:hover {
+    transform: scale(1.05) translateZ(0);
+    -webkit-transform: scale(1.05) translateZ(0);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3); /* effet d’illumination */
+    z-index: 10; /* toujours devant les autres items */
+}
+
+/* Assure que les éléments à l’intérieur ne deviennent pas transparents */
+.carousel-item > * {
+    opacity: 1 !important;
+}
+
+/* Rotation / container reste inchangé */
 .carousel-3d {
     perspective: 1200px;
     -webkit-perspective: 1200px;
@@ -214,31 +239,23 @@ body.curtain-animation-done .curtain {
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
     will-change: transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
 }
 
+/* Les items en rotation restent visibles */
 .carousel-items {
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
 }
 
-.carousel-item {
-    transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transition: opacity 0.6s ease;
+/* Items en arrière-plan légèrement transparents si tu veux */
+.carousel-item:not(:hover) {
+    opacity: 0.95; /* un peu moins que l’item devant mais jamais 0 */
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.carousel-3d.dragging .carousel-rotation {
-    will-change: transform;
-}
-
-.carousel-3d:not(.dragging) .carousel-rotation {
-    will-change: auto;
-}
-
+/* Indicateur rotation - inchangé */
 .rotation-indicator {
     position: absolute;
     top: -40px;
@@ -257,6 +274,7 @@ body.curtain-animation-done .curtain {
 .carousel-3d.dragging .rotation-indicator {
     opacity: 1;
 }
+
 
 /* ============================================
    CAROUSEL EXPÉRIENCES
